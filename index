@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#075e54">
+<title>Sistem RPH SK Gading-Gading</title>
+
+<style>
+:root {
+  --green: #075e54;
+  --green2: #0b7668;
+  --gold: #d7ad48;
+  --cream: #fffaf0;
+  --mint: #e5f5ee;
+  --pink: #fff0f2;
+  --lavender: #f1efff;
+  --blue: #eaf4ff;
+  --ink: #253b36;
+  --muted: #6b7d77;
+  --line: #e3eae5;
+  --white: #fff;
+  --danger: #b42318;
+  --shadow: 0 8px 28px rgba(25, 67, 55, .08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f5f8f5;
+  color: var(--ink);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.app-header {
+  background: linear-gradient(120deg, #064e45, #0b7668);
+  color: white;
+  padding: 22px clamp(16px, 4vw, 48px);
+  border-bottom: 4px solid var(--gold);
+}
+
+.header-inner {
+  max-width: 1450px;
+  margin: auto;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: #fff5d9;
+  color: var(--green);
+  font-size: 28px;
+  box-shadow: 0 4px 15px #003d3533;
+}
+
+.brand h1 { margin: 0 0 5px; font-size: clamp(20px, 3vw, 29px); }
+.brand p { margin: 0; color: #d6eee6; font-size: 13px; }
+
+.header-tag {
+  border: 1px solid #ffffff55;
+  background: #ffffff12;
+  padding: 9px 13px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.page {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 24px clamp(12px, 3vw, 36px) 50px;
+}
+
+.welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.welcome h2 { margin: 0 0 5px; font-size: 24px; }
+.welcome p { margin: 0; color: var(--muted); font-size: 14px; }
+
+.btn {
+  border: 0;
+  border-radius: 11px;
+  padding: 11px 15px;
+  font-weight: 700;
+  transition: transform .15s, opacity .15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-primary { background: var(--green); color: white; }
+.btn-gold { background: #f6e6b6; color: #59420b; }
+.btn-light { background: white; color: var(--green); border: 1px solid var(--line); }
+.btn-danger { background: #fff0ee; color: var(--danger); }
+.btn-small { padding: 7px 10px; font-size: 12px; border-radius: 8px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.stat {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  padding: 19px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.stat-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.stat-label { font-size: 12px; color: var(--muted); font-weight: 700; }
+.stat-icon { font-size: 21px; }
+.stat-number { margin-top: 13px; font-size: 30px; font-weight: 800; color: var(--green); }
+.stat-sub { margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+.main-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, .8fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.panel-head {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.panel-head h3 { margin: 0; font-size: 17px; }
+.panel-body { padding: 20px; }
+
+.field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.field label { font-size: 12px; font-weight: 800; color: #4b625b; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #dce6df;
+  background: #fff;
+  border-radius: 10px;
+  padding: 11px 12px;
+  outline: none;
+  color: var(--ink);
+}
+.field textarea { resize: vertical; min-height: 85px; line-height: 1.5; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--green2);
+  box-shadow: 0 0 0 3px #0b766815;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+.span-2 { grid-column: span 2; }
+
+.form-section {
+  grid-column: span 2;
+  padding: 10px 12px;
+  margin-top: 4px;
+  background: var(--mint);
+  border-left: 4px solid var(--green2);
+  border-radius: 7px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.toolbar input, .toolbar select {
+  border: 1px solid #dce6df;
+  background: white;
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+.toolbar input { flex: 1 1 180px; }
+
+.records { display: flex; flex-direction: column; gap: 12px; }
+
+.record {
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  background: #fff;
+}
+.record:nth-child(4n+1) { border-left: 4px solid #77bba0; }
+.record:nth-child(4n+2) { border-left: 4px solid #e3c36d; }
+.record:nth-child(4n+3) { border-left: 4px solid #c1b8f0; }
+.record:nth-child(4n) { border-left: 4px solid #f0b9c6; }
+
+.record h4 { margin: 0 0 8px; font-size: 15px; line-height: 1.4; }
+.record p { margin: 4px 0; font-size: 12px; color: var(--muted); }
+.record-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.pill {
+  display: inline-block;
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: var(--cream);
+  color: #725a1a;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.quick-item {
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: var(--cream);
+  border: 1px solid #f1e7c8;
+}
+.quick-item:nth-child(2) { background: var(--mint); border-color: #d6eee2; }
+.quick-item:nth-child(3) { background: var(--lavender); border-color: #e4e0ff; }
+.quick-item h4 { margin: 0 0 5px; font-size: 13px; }
+.quick-item p { margin: 0; font-size: 12px; color: var(--muted); }
+
+.notice {
+  display: none;
+  margin-bottom: 18px;
+  padding: 12px 15px;
+  border-radius: 11px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.notice.show { display: block; }
+.notice.info { background: var(--blue); color: #174d80; }
+.notice.success { background: var(--mint); color: #175b45; }
+.notice.error { background: #fff0ee; color: #982d23; }
+
+.empty {
+  text-align: center;
+  padding: 35px 15px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.empty .emoji { font-size: 32px; margin-bottom: 8px; }
+
+.footer {
+  text-align: center;
+  color: #7c8e87;
+  font-size: 12px;
+  padding: 12px;
+}
+
+#loading {
+  display: none;
+  font-size: 12px;
+  color: #d9f2e8;
+  margin-top: 6px;
+}
+
+@media (max-width: 950px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 520px) {
+  .page { padding: 16px 10px 35px; }
+  .app-header { padding: 17px 13px; }
+  .brand-mark { width: 45px; height: 45px; font-size: 23px; }
+  .header-tag { display: none; }
+  .stats { gap: 9px; }
+  .stat { padding: 13px; border-radius: 13px; }
+  .stat-number { font-size: 25px; }
+  .stat-label { font-size: 11px; }
+  .panel-head, .panel-body { padding: 14px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .span-2, .form-section { grid-column: span 1; }
+  .record { flex-direction: column; }
+  .record-actions { justify-content: flex-start; }
+  .welcome h2 { font-size: 21px; }
+}
+</style>
+</head>
+
+<body>
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">📚</div>
+      <div>
+        <h1>Sistem RPH SK Gading-Gading</h1>
+        <p>Pengurusan Rancangan Pengajaran Harian</p>
+        <div id="loading">Sedang berhubung dengan pangkalan data…</div>
+      </div>
+    </div>
+    <div class="header-tag">✦ Rancang • Laksana • Refleksi</div>
+  </div>
+</header>
+
+<main class="page">
+  <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+  <section class="welcome">
+    <div>
+      <h2>Dashboard RPH</h2>
+      <p>Urus rekod pengajaran dalam satu tempat.</p>
+    </div>
+    <button class="btn btn-primary" id="newButton">＋ RPH Baharu</button>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-top"><span class="stat-label">JUMLAH RPH</span><span class="stat-icon">📘</span></div>
+      <div class="stat-number" id="totalStat">0</div>
+      <div class="stat-sub">Semua rekod disimpan</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span class="stat-label">PENDIDIKAN ISLAM</span><span class="stat-icon">🌿</span></div>
+      <div class="stat-number" id="piStat">0</div>
+      <div class="stat-sub">Tahun 1 hingga Tahun 3</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span class="stat-label">BAHASA ARAB</span><span class="stat-icon">✨</span></div>
+      <div class="stat-number" id="baStat">0</div>
+      <div class="stat-sub">Tahun 4 hingga Tahun 6</div>
+    </div>
+    <div class="stat">
+      <div class="stat-top"><span class="stat-label">TASMIK</span><span class="stat-icon">📖</span></div>
+      <div class="stat-number" id="tasStat">0</div>
+      <div class="stat-sub">Tahun 3 hingga Tahun 6</div>
+    </div>
+  </section>
+
+  <div class="main-grid">
+    <div>
+      <section class="panel" id="formPanel">
+        <div class="panel-head">
+          <h3 id="formTitle">✏️ Cipta RPH Baharu</h3>
+          <button class="btn btn-light btn-small" id="resetButton">Kosongkan</button>
+        </div>
+        <div class="panel-body">
+          <form id="rphForm">
+            <input type="hidden" id="id">
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="tarikh">Tarikh *</label>
+                <input type="date" id="tarikh" required>
+              </div>
+              <div class="field">
+                <label for="hari">Hari</label>
+                <select id="hari">
+                  <option>Isnin</option><option>Selasa</option>
+                  <option>Rabu</option><option>Khamis</option>
+                  <option>Jumaat</option><option>Sabtu</option><option>Ahad</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="minggu">Minggu persekolahan</label>
+                <input id="minggu" placeholder="Contoh: Minggu 35">
+              </div>
+              <div class="field">
+                <label for="subjek">Subjek *</label>
+                <select id="subjek" required>
+                  <option value="">Pilih subjek</option>
+                  <option>Pendidikan Islam</option>
+                  <option>Bahasa Arab</option>
+                  <option>Tasmik</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="tahun">Tahun</label>
+                <select id="tahun">
+                  <option value="">Pilih tahun</option>
+                  <option>Tahun 1</option><option>Tahun 2</option>
+                  <option>Tahun 3</option><option>Tahun 4</option>
+                  <option>Tahun 5</option><option>Tahun 6</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="kelas">Kelas</label>
+                <input id="kelas" placeholder="Nama kelas">
+              </div>
+              <div class="field">
+                <label for="masa">Masa</label>
+                <input id="masa" placeholder="Contoh: 8.00–9.00 pagi">
+              </div>
+              <div class="field">
+                <label for="bidang">Bidang / kemahiran</label>
+                <input id="bidang" placeholder="Bidang pelajaran">
+              </div>
+
+              <div class="field span-2">
+                <label for="tajuk">Tajuk pelajaran *</label>
+                <input id="tajuk" required placeholder="Masukkan tajuk RPH">
+              </div>
+
+              <div class="form-section">📌 Standard pembelajaran</div>
+
+              <div class="field span-2">
+                <label for="standardKandungan">Standard Kandungan (SK)</label>
+                <textarea id="standardKandungan" placeholder="Masukkan SK berdasarkan dokumen rasmi"></textarea>
+              </div>
+              <div class="field span-2">
+                <label for="standardPembelajaran">Standard Pembelajaran (SP)</label>
+                <textarea id="standardPembelajaran" placeholder="Masukkan SP berdasarkan dokumen rasmi"></textarea>
+              </div>
+
+              <div class="form-section">🎯 Objektif dan pelaksanaan</div>
+
+              <div class="field span-2">
+                <label for="objektif">Objektif pembelajaran</label>
+                <textarea id="objektif" placeholder="Pada akhir pembelajaran, murid dapat…"></textarea>
+              </div>
+              <div class="field span-2">
+                <label for="kriteriaKejayaan">Kriteria kejayaan</label>
+                <textarea id="kriteriaKejayaan" placeholder="Petunjuk yang boleh diperhatikan atau diukur"></textarea>
+              </div>
+              <div class="field span-2">
+                <label for="aktiviti">Aktiviti pengajaran dan pembelajaran</label>
+                <textarea id="aktiviti" style="min-height:125px" placeholder="Set induksi, langkah aktiviti dan penutup"></textarea>
+              </div>
+              <div class="field">
+                <label for="bbm">BBM / sumber</label>
+                <textarea id="bbm" placeholder="Bahan bantu mengajar"></textarea>
+              </div>
+              <div class="field">
+                <label for="pentaksiran">Pentaksiran</label>
+                <textarea id="pentaksiran" placeholder="Kaedah pentaksiran"></textarea>
+              </div>
+              <div class="field span-2">
+                <label for="refleksi">Refleksi guru</label>
+                <textarea id="refleksi" placeholder="Pencapaian murid, bilangan murid dan tindakan susulan"></textarea>
+              </div>
+              <div class="field span-2">
+                <label for="catatan">Catatan tambahan</label>
+                <textarea id="catatan" placeholder="Catatan jika perlu"></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" id="saveButton" type="submit">💾 Simpan RPH</button>
+              <button class="btn btn-gold" type="button" id="printFormButton">🖨️ Cetak RPH</button>
+              <button class="btn btn-light" type="button" id="cancelButton">Batal edit</button>
+            </div>
+            <p style="font-size:11px;color:#74847d;line-height:1.5;margin:15px 0 0">
+              Pastikan SK dan SP disemak dengan dokumen kurikulum rasmi sebelum RPH digunakan.
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <h3>🗂️ Rekod RPH</h3>
+          <button class="btn btn-light btn-small" id="refreshButton">↻ Muat semula</button>
+        </div>
+        <div class="panel-body">
+          <div class="toolbar" style="margin-bottom:15px">
+            <input id="searchInput" type="search" placeholder="Cari tajuk, kelas atau minggu…">
+            <select id="filterSubject" aria-label="Tapis subjek">
+              <option value="">Semua subjek</option>
+              <option>Pendidikan Islam</option>
+              <option>Bahasa Arab</option>
+              <option>Tasmik</option>
+            </select>
+            <select id="filterYear" aria-label="Tapis tahun">
+              <option value="">Semua tahun</option>
+              <option>Tahun 1</option><option>Tahun 2</option>
+              <option>Tahun 3</option><option>Tahun 4</option>
+              <option>Tahun 5</option><option>Tahun 6</option>
+            </select>
+          </div>
+          <div id="recordList" class="records">
+            <div class="empty"><div class="emoji">⏳</div>Memuatkan rekod…</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside>
+      <section class="panel">
+        <div class="panel-head"><h3>🌼 Panduan ringkas</h3></div>
+        <div class="panel-body">
+          <div class="quick-item">
+            <h4>1. Isi maklumat asas</h4>
+            <p>Pilih tarikh, subjek, tahun, kelas dan masa pengajaran.</p>
+          </div>
+          <div class="quick-item">
+            <h4>2. Lengkapkan kandungan</h4>
+            <p>Masukkan SK dan SP yang sah, objektif, aktiviti serta pentaksiran.</p>
+          </div>
+          <div class="quick-item">
+            <h4>3. Simpan dan cetak</h4>
+            <p>Simpan rekod ke Google Sheets. Gunakan butang cetak untuk menyimpan sebagai PDF.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h3>🔐 Sambungan sistem</h3></div>
+        <div class="panel-body">
+          <p id="connectionStatus" style="font-size:13px;line-height:1.6;margin:0 0 12px">
+            Belum diuji.
+          </p>
+          <button class="btn btn-light" id="testButton">Uji sambungan</button>
+          <p style="font-size:11px;color:#74847d;line-height:1.6;margin:14px 0 0">
+            Sistem memerlukan URL Web App Apps Script yang sah serta kebenaran akaun Google yang dibenarkan.
+          </p>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="footer">
+    Sistem RPH SK Gading-Gading · Reka bentuk untuk kegunaan pengurusan pengajaran
+  </footer>
+</main>
+
+<script>
+"use strict";
+
+// ====================================================
+// KONFIGURASI
+// Tampal URL Web App Apps Script selepas deployment.
+// URL mesti berakhir dengan /exec
+// ====================================================
+const API_URL = "https://script.google.com/a/macros/moe-dl.edu.my/s/AKfycbyNsHFcyr0sd7V0oi1Mb9gN8Q1Fk3Kzet9oSSBBg_Dwr4SKJYNpMx1-BQdY8w_CQ7UwcA/exec";
+
+let records = [];
+let busy = false;
+
+const $ = (id) => document.getElementById(id);
+
+const fields = [
+  "id", "tarikh", "hari", "minggu", "subjek", "tahun", "kelas", "masa",
+  "bidang", "tajuk", "standardKandungan", "standardPembelajaran",
+  "objektif", "kriteriaKejayaan", "aktiviti", "bbm", "pentaksiran",
+  "refleksi", "catatan"
+];
+
+function showNotice(message, type = "info") {
+  const box = $("notice");
+  box.textContent = message;
+  box.className = "notice show " + type;
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function setBusy(value) {
+  busy = value;
+  $("loading").style.display = value ? "block" : "none";
+  $("saveButton").disabled = value;
+  $("refreshButton").disabled = value;
+  $("testButton").disabled = value;
+}
+
+function validateApi() {
+  if (!API_URL || !API_URL.startsWith("https://script.google.com/") ||
+      !API_URL.endsWith("/exec")) {
+    throw new Error("Sila isi API_URL dengan URL Web App Apps Script yang berakhir dengan /exec.");
+  }
+}
+
+function jsonp(params, timeoutMs = 20000) {
+  return new Promise((resolve, reject) => {
+    try {
+      validateApi();
+    } catch (e) {
+      reject(e);
+      return;
+    }
+
+    const callbackName = "rphCallback_" + Date.now() + "_" +
+      Math.random().toString(36).slice(2);
+
+    const script = document.createElement("script");
+    const query = new URLSearchParams({
+      ...params,
+      callback: callbackName,
+      _: String(Date.now())
+    });
+
+    let finished = false;
+    const timer = setTimeout(() => {
+      finish();
+      reject(new Error("Sambungan mengambil masa terlalu lama. Semak deployment dan log masuk Google."));
+    }, timeoutMs);
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      delete window[callbackName];
+      script.remove();
+    }
+
+    window[callbackName] = (result) => {
+      finish();
+      if (!result || result.ok !== true) {
+        reject(new Error(result && result.message ? result.message : "Permintaan gagal."));
+        return;
+      }
+      resolve(result);
+    };
+
+    script.onerror = () => {
+      finish();
+      reject(new Error("Tidak dapat mencapai Apps Script. Semak URL, deployment dan akses akaun."));
+    };
+
+    script.src = API_URL + "?" + query.toString();
+    document.body.appendChild(script);
+  });
+}
+
+async function api(action, extra = {}) {
+  return jsonp({ action, ...extra });
+}
+
+async function loadRecords(showMessage = false) {
+  setBusy(true);
+  try {
+    const result = await api("list");
+    records = Array.isArray(result.data) ? result.data : [];
+    renderAll();
+    $("connectionStatus").textContent = "✅ Sambungan berjaya. " + records.length + " rekod ditemui.";
+    if (showMessage) showNotice("Rekod berjaya dimuat semula.", "success");
+  } catch (err) {
+    $("connectionStatus").textContent = "⚠️ " + err.message;
+    $("recordList").innerHTML =
+      '<div class="empty"><div class="emoji">🔌</div>' +
+      escapeHtml(err.message) +
+      '<p>Semak URL Apps Script dan tetapan akses deployment.</p></div>';
+    if (showMessage) showNotice(err.message, "error");
+  } finally {
+    setBusy(false);
+  }
+}
+
+function renderAll() {
+  $("totalStat").textContent = records.length;
+  $("piStat").textContent = records.filter(r => r.subjek === "Pendidikan Islam").length;
+  $("baStat").textContent = records.filter(r => r.subjek === "Bahasa Arab").length;
+  $("tasStat").textContent = records.filter(r => r.subjek === "Tasmik").length;
+  renderRecords();
+}
+
+function renderRecords() {
+  const query = $("searchInput").value.trim().toLowerCase();
+  const subject = $("filterSubject").value;
+  const year = $("filterYear").value;
+
+  const filtered = records.filter(r => {
+    const text = [
+      r.tajuk, r.subjek, r.tahun, r.kelas, r.minggu, r.bidang, r.tarikh
+    ].join(" ").toLowerCase();
+
+    return (!query || text.includes(query)) &&
+      (!subject || r.subjek === subject) &&
+      (!year || r.tahun === year);
+  });
+
+  const list = $("recordList");
+
+  if (!filtered.length) {
+    list.innerHTML =
+      '<div class="empty"><div class="emoji">🌱</div>' +
+      (records.length ? "Tiada rekod sepadan dengan carian." : "Belum ada RPH disimpan. Cipta rekod pertama anda.") +
+      "</div>";
+    return;
+  }
+
+  list.innerHTML = filtered.map(r => `
+    <article class="record">
+      <div style="min-width:0;flex:1">
+        <span class="pill">${escapeHtml(r.subjek || "Subjek belum dipilih")}</span>
+        <h4>${escapeHtml(r.tajuk || "Tanpa tajuk")}</h4>
+        <p>📅 ${escapeHtml(formatDate(r.tarikh))} · ${escapeHtml(r.hari || "")}</p>
+        <p>🎓 ${escapeHtml(r.tahun || "Tahun —")} · Kelas ${escapeHtml(r.kelas || "—")}</p>
+        <p>🕒 ${escapeHtml(r.masa || "Masa belum diisi")} · ${escapeHtml(r.minggu || "")}</p>
+      </div>
+      <div class="record-actions">
+        <button class="btn btn-light btn-small" data-action="edit" data-id="${escapeAttr(r.id)}">Edit</button>
+        <button class="btn btn-gold btn-small" data-action="print" data-id="${escapeAttr(r.id)}">Cetak</button>
+        <button class="btn btn-danger btn-small" data-action="delete" data-id="${escapeAttr(r.id)}">Padam</button>
+      </div>
+    </article>
+  `).join("");
+}
+
+function escapeHtml(value) {
+  return String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  }[ch]));
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value).replace(/`/g, "&#96;");
+}
+
+function formatDate(value) {
+  if (!value) return "Tarikh belum diisi";
+  const parts = String(value).split("-");
+  if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  return value;
+}
+
+function resetForm(scroll = false) {
+  $("rphForm").reset();
+  $("id").value = "";
+  $("formTitle").textContent = "✏️ Cipta RPH Baharu";
+  $("saveButton").textContent = "💾 Simpan RPH";
+  $("tarikh").value = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kuala_Lumpur" });
+  updateDay();
+  if (scroll) $("formPanel").scrollIntoView({ behavior: "smooth" });
+}
+
+function updateDay() {
+  const value = $("tarikh").value;
+  if (!value) return;
+  const date = new Date(value + "T12:00:00");
+  const days = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
+  $("hari").value = days[date.getDay()];
+}
+
+function getFormRecord() {
+  const record = {};
+  fields.forEach(key => {
+    record[key] = $(key) ? $(key).value.trim() : "";
+  });
+  return record;
+}
+
+function fillForm(record) {
+  fields.forEach(key => {
+    if ($(key)) $(key).value = record[key] || "";
+  });
+  $("formTitle").textContent = "📝 Kemaskini RPH";
+  $("saveButton").textContent = "💾 Simpan Perubahan";
+  $("formPanel").scrollIntoView({ behavior: "smooth" });
+}
+
+async function saveRecord(event) {
+  event.preventDefault();
+  if (busy) return;
+
+  const record = getFormRecord();
+  if (!record.tarikh || !record.subjek || !record.tajuk) {
+    showNotice("Tarikh, subjek dan tajuk pelajaran wajib diisi.", "error");
+    return;
+  }
+
+  setBusy(true);
+  try {
+    // JSON dimasukkan sebagai parameter GET. Untuk data RPH yang sangat
+    // panjang, pertimbangkan backend yang menyokong POST secara rasmi.
+    const encodedRecord = JSON.stringify(record);
+    const result = await api("save", { record: encodedRecord });
+
+    showNotice("RPH berjaya disimpan.", "success");
+    resetForm(false);
+    await loadRecords(false);
+    $("formPanel").scrollIntoView({ behavior: "smooth" });
+  } catch (err) {
+    showNotice("RPH tidak berjaya disimpan: " + err.message, "error");
+  } finally {
+    setBusy(false);
+  }
+}
+
+async function deleteRecord(id) {
+  const record = records.find(r => String(r.id) === String(id));
+  if (!record) return;
+
+  const ok = confirm(
+    "Padam RPH ini?\n\n" + (record.tajuk || "Tanpa tajuk") +
+    "\n\nTindakan ini tidak boleh dibatalkan."
+  );
+  if (!ok) return;
+
+  setBusy(true);
+  try {
+    await api("delete", { id });
+    showNotice("RPH berjaya dipadam.", "success");
+    await loadRecords(false);
+  } catch (err) {
+    showNotice("Tidak dapat memadam RPH: " + err.message, "error");
+  } finally {
+    setBusy(false);
+  }
+}
+
+function printRecord(record) {
+  const contentFields = [
+    ["Standard Kandungan", record.standardKandungan],
+    ["Standard Pembelajaran", record.standardPembelajaran],
+    ["Objektif Pembelajaran", record.objektif],
+    ["Kriteria Kejayaan", record.kriteriaKejayaan],
+    ["Aktiviti Pengajaran dan Pembelajaran", record.aktiviti],
+    ["BBM / Sumber", record.bbm],
+    ["Pentaksiran", record.pentaksiran],
+    ["Refleksi Guru", record.refleksi],
+    ["Catatan", record.catatan]
+  ];
+
+  const sections = contentFields
+    .filter(([label, value]) => String(value || "").trim())
+    .map(([label, value]) => `
+      <section class="section">
+        <h3>${escapeHtml(label)}</h3>
+        <div class="text">${escapeHtml(value).replace(/\n/g, "<br>")}</div>
+      </section>
+    `).join("");
+
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) {
+    showNotice("Pelayar menyekat tetingkap cetakan. Benarkan pop-up untuk laman ini.", "error");
+    return;
+  }
+
+  printWindow.document.open();
+  printWindow.document.write(`<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<title>RPH - ${escapeHtml(record.tajuk || "")}</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  body { font-family: Arial, sans-serif; color:#263a33; font-size:11pt; line-height:1.5; }
+  header { border-bottom:3px solid #d7ad48; padding-bottom:12px; margin-bottom:18px; }
+  h1 { font-size:18pt; margin:0 0 5px; color:#075e54; }
+  header p { margin:3px 0; font-size:10pt; }
+  .meta { display:grid; grid-template-columns:1fr 1fr; gap:8px 18px; background:#f2f8f4; padding:12px; border-radius:6px; }
+  .meta div { padding:2px 0; }
+  .label { font-size:9pt; font-weight:bold; color:#547068; }
+  .section { margin-top:16px; break-inside:avoid; }
+  .section h3 { font-size:11pt; background:#e5f5ee; padding:7px 9px; border-left:4px solid #0b7668; margin:0 0 7px; }
+  .text { white-space:normal; overflow-wrap:anywhere; }
+  .signature { margin-top:35px; display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+  .sign { border-top:1px solid #8a9992; padding-top:7px; font-size:10pt; }
+  @media print { body { print-color-adjust:exact; -webkit-print-color-adjust:exact; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>RANCANGAN PENGAJARAN HARIAN</h1>
+  <p><strong>SEKOLAH KEBANGSAAN GADING-GADING</strong></p>
+  <p>BERILTIZAM GEMILANG, EMPOWERING, REFORM &amp; EXCELLENCE</p>
+</header>
+<div class="meta">
+  <div><span class="label">Tarikh / Hari</span><br>${escapeHtml(formatDate(record.tarikh))} / ${escapeHtml(record.hari || "—")}</div>
+  <div><span class="label">Minggu</span><br>${escapeHtml(record.minggu || "—")}</div>
+  <div><span class="label">Subjek</span><br>${escapeHtml(record.subjek || "—")}</div>
+  <div><span class="label">Tahun / Kelas</span><br>${escapeHtml(record.tahun || "—")} / ${escapeHtml(record.kelas || "—")}</div>
+  <div><span class="label">Masa</span><br>${escapeHtml(record.masa || "—")}</div>
+  <div><span class="label">Bidang / Kemahiran</span><br>${escapeHtml(record.bidang || "—")}</div>
+  <div style="grid-column:1/-1"><span class="label">Tajuk Pelajaran</span><br><strong>${escapeHtml(record.tajuk || "—")}</strong></div>
+</div>
+${sections}
+<div class="signature">
+  <div class="sign">Disediakan oleh: __________________________</div>
+  <div class="sign">Semakan: _________________________________</div>
+</div>
+<script>window.onload = () => setTimeout(() => window.print(), 300);<\/script>
+</body>
+</html>`);
+  printWindow.document.close();
+}
+
+$("rphForm").addEventListener("submit", saveRecord);
+$("tarikh").addEventListener("change", updateDay);
+$("newButton").addEventListener("click", () => resetForm(true));
+$("resetButton").addEventListener("click", () => resetForm(false));
+$("cancelButton").addEventListener("click", () => resetForm(false));
+$("refreshButton").addEventListener("click", () => loadRecords(true));
+$("searchInput").addEventListener("input", renderRecords);
+$("filterSubject").addEventListener("change", renderRecords);
+$("filterYear").addEventListener("change", renderRecords);
+
+$("printFormButton").addEventListener("click", () => {
+  const record = getFormRecord();
+  if (!record.tajuk) {
+    showNotice("Masukkan tajuk dahulu sebelum mencetak RPH.", "error");
+    return;
+  }
+  printRecord(record);
+});
+
+$("recordList").addEventListener("click", event => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const id = button.dataset.id;
+  const record = records.find(r => String(r.id) === String(id));
+  if (!record) return;
+
+  if (button.dataset.action === "edit") fillForm(record);
+  if (button.dataset.action === "print") printRecord(record);
+  if (button.dataset.action === "delete") deleteRecord(id);
+});
+
+$("testButton").addEventListener("click", async () => {
+  setBusy(true);
+  try {
+    const result = await api("ping");
+    $("connectionStatus").textContent = "✅ " + result.message + " " + result.app;
+    showNotice("Sambungan backend berjaya.", "success");
+  } catch (err) {
+    $("connectionStatus").textContent = "❌ " + err.message;
+    showNotice(err.message, "error");
+  } finally {
+    setBusy(false);
+  }
+});
+
+resetForm(false);
+loadRecords(false);
+</script>
+</body>
+</html>
