@@ -5,27 +5,31 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Penjana RPH Mingguan</title>
 <style>
-/* Susun atur: panel kawalan di atas, pratonton halaman A4 di bawah; cetak hanya halaman RPH */
+/* Susun atur: panel kawalan di atas, pratonton halaman A4 (potret, penuh ke bawah) di bawah; cetak hanya halaman RPH */
 :root{--bg:#f3f1ec;--panel:#fff;--fg:#1d2420;--mut:#5d6a63;--line:#d9d6cd;--acc:#0f5c4d;--acc-fg:#fff;--warn:#8a5a00;--warnbg:#fff3d6}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161a18;--panel:#1f2522;--fg:#e8ece9;--mut:#9aa7a0;--line:#34403a;--acc:#5fc2a8;--acc-fg:#0b1512;--warn:#f0c36a;--warnbg:#3a2f12;color-scheme:dark}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,"Segoe UI",Roboto,sans-serif}
 .ui{max-width:1040px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-left,0px)) 8px}
 h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
+h2{font-size:15px;margin:0 0 8px}
 .sub{color:var(--mut);margin:0 0 16px}
 .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px}
+.card{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
 label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--mut);font-weight:600;letter-spacing:.02em;text-transform:uppercase}
-select,input[type=number],input[type=text]{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 9px;min-width:0}
+select,input[type=number],input[type=text],textarea{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:7px 9px;min-width:0}
 select{min-width:260px}
 input[type=number]{width:74px}
+textarea{width:100%;direction:rtl;font-size:15px;line-height:1.7;font-family:'Traditional Arabic','Amiri','Noto Naskh Arabic','DejaVu Sans',serif}
 button{font:inherit;font-weight:600;border:0;border-radius:6px;padding:9px 16px;background:var(--acc);color:var(--acc-fg);cursor:pointer}
-button.sec{background:transparent;color:var(--fg);border:1px solid var(--line)}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button.sec{background:transparent;color:var(--fg);border:1px solid var(--line);padding:6px 12px}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .grow{flex:1}
 .note{margin:12px 0;padding:10px 12px;border-radius:6px;background:var(--warnbg);color:var(--warn)}
-details{margin:12px 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+details{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
 summary{cursor:pointer;font-weight:600}
-.murid{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+.murid{display:flex;flex-wrap:wrap;gap:12px}
+.pus{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:10px}
 .tw{overflow-x:auto;margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
 table.l{border-collapse:collapse;width:100%;min-width:760px}
 table.l th{font-size:12px;text-align:left;color:var(--mut);padding:8px 10px;border-bottom:1px solid var(--line);text-transform:uppercase;letter-spacing:.03em}
@@ -34,38 +38,36 @@ table.l tr:last-child td{border-bottom:0}
 .tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--line)}
 .t-PI{color:#0b6b57}.t-BA{color:#7a4fb0}.t-TAS{color:#b2570f}
 .fokus{color:var(--mut);font-size:13px;max-width:320px}
+.bad{border-color:#c0392b!important}
 .preview{padding:18px 0 40px;display:flex;flex-direction:column;align-items:center;gap:16px;overflow-x:auto}
-.pg{background:#fff;color:#000;width:194mm;padding:0;box-shadow:0 1px 6px rgba(0,0,0,.25);flex:none}
 .pvh{max-width:1040px;margin:8px auto 0;padding:0 max(16px,env(safe-area-inset-left,0px));color:var(--mut)}
-/* ---- halaman RPH ---- */
-.pg{direction:rtl;font-family:'Traditional Arabic','Amiri','FreeSerif','Noto Naskh Arabic','DejaVu Sans',serif;font-size:10.5pt}
-.pg table{border-collapse:collapse;width:100%;table-layout:fixed}
-.pg td{border:1px solid #000;padding:2px 7px;line-height:1.35;vertical-align:middle}
-.pg .head td{background:#ffd966;text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-weight:bold;font-size:13pt;height:38px}
+/* ---- halaman RPH: A4 potret, satu RPH satu muka surat, penuh hingga ke bawah ---- */
+.pg{background:#fff;color:#000;width:194mm;height:280mm;box-shadow:0 1px 6px rgba(0,0,0,.25);flex:none;overflow:visible;
+    direction:rtl;font-family:'Traditional Arabic','Amiri','FreeSerif','Noto Naskh Arabic','DejaVu Sans',serif;font-size:12pt}
+.pg>table{border-collapse:collapse;width:100%;height:100%;table-layout:fixed}
+.pg td{border:1px solid #000;padding:3px 8px;line-height:1.4;vertical-align:middle}
+.pg .head td{background:#ffd966;text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-weight:bold;font-size:1.15em}
 .pg .lab{background:#fff2cc;font-weight:bold}
-.pg .n{text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-size:9pt}
-.pg .lat{direction:ltr;unicode-bidi:embed;font-family:Arial,'DejaVu Sans',sans-serif;font-size:9.5pt}
-.pg .c{text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-size:9.5pt}
+.pg .n{text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.8em}
+.pg .lat{direction:ltr;unicode-bidi:embed;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.8em}
+.pg .c{text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.85em}
 .pg .cj{text-align:center}
-.pg img.day{height:20px;vertical-align:middle}
-.pg.ba{font-size:10pt}
-.pg.ba td{padding:1px 5px;line-height:1.25}
-.pg.ba .ttl td{background:#e7e6e6;border:1px solid #000;font-size:20pt;font-weight:bold;height:34px;padding:4px 10px}
+.pg .sub2{margin-top:2px}
+.pg img.day{height:1.5em;vertical-align:middle}
+.pg.ba{font-size:11pt}
+.pg.ba td{padding:2px 6px;line-height:1.3}
+.pg.ba .ttl td{background:#e7e6e6;border:1px solid #000;font-size:1.8em;font-weight:bold;padding:4px 10px}
 .pg.ba .l{font-weight:bold}
 .pg.ba .g{background:#a9d18e}.pg.ba .b{background:#b4c6e7}.pg.ba .p{background:#d9b3ff}
-.pg.ba .chk{text-align:center;font-size:13pt;font-family:'DejaVu Sans',sans-serif}
-.pg.ba .sm{font-size:9.5pt}
+.pg.ba .chk{text-align:center;font-size:1.2em;font-family:'DejaVu Sans',sans-serif}
+.pg.ba .sm{font-size:.92em}
 .pg.ba ul{margin:0;padding-right:18px;list-style:square}
 .pg.ba .ltr{direction:ltr;unicode-bidi:embed}
-.pg.ta{width:531.3pt}
-.pg.ta .body{position:relative;margin-top:-1px}
-.pg.ta .body img{display:block;width:531.3pt}
-.pg.ta .rn{position:absolute;font-family:Arial,'DejaVu Sans',sans-serif;font-size:9pt;width:12pt;text-align:center;direction:ltr}
-@page{size:A4;margin:8mm}
+@page{size:A4 portrait;margin:8mm}
 @media print{
-  body{background:#fff}
+  html,body{background:#fff}
   .ui,.pvh{display:none!important}
-  .preview{padding:0;gap:0;display:block}
+  .preview{padding:0;gap:0;display:block;overflow:visible}
   .pg{box-shadow:none;margin:0;break-after:page;page-break-after:always}
   .pg:last-child{break-after:auto;page-break-after:auto}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -83,12 +85,18 @@ table.l tr:last-child td{border-bottom:0}
     <button id="cetak" type="button">Cetak / Simpan PDF</button>
   </div>
   <div id="notacuti" class="note" hidden></div>
-  <details>
-    <summary>Bilangan murid setiap kelas</summary>
-    <p class="sub" style="margin:6px 0 0">Digunakan untuk kiraan refleksi: tidak capai = jumlah murid tolak murid capai.</p>
+  <div class="card">
+    <h2>1. Bilangan murid setiap kelas</h2>
     <div class="murid" id="murid"></div>
+  </div>
+  <div id="amaran" class="note" hidden></div>
+  <div class="tw"><table class="l"><thead><tr><th>Hari</th><th>Masa</th><th>Kelas</th><th>Subjek</th><th>Fokus RPT</th><th>2. Murid capai</th><th>Tajuk sendiri (Jawi), pilihan</th></tr></thead><tbody id="senarai"></tbody></table></div>
+  <details>
+    <summary>Ayat aktiviti dalam RPH (boleh dibetulkan, satu ayat satu baris)</summary>
+    <p class="sub" style="margin:6px 0 0">Baris yang bermula dengan &gt; menjadi baris kecil di bawah ayat sebelumnya, contohnya Kumpulan A, B dan C. Pembetulan disimpan dan terpakai pada semua RPH.</p>
+    <div class="pus" id="pus"></div>
+    <p style="margin:10px 0 0"><button type="button" class="sec" id="pulih">Pulihkan semua ayat asal</button></p>
   </details>
-  <div class="tw"><table class="l"><thead><tr><th>Hari</th><th>Masa</th><th>Kelas</th><th>Subjek</th><th>Fokus RPT</th><th>Murid capai</th><th>Tajuk sendiri (Jawi), pilihan</th></tr></thead><tbody id="senarai"></tbody></table></div>
 </div>
 <div class="pvh"><strong id="bil"></strong> <span id="bilsub"></span></div>
 <div class="preview" id="pratonton"></div>
@@ -99,18 +107,29 @@ const HARI=["Isnin","Selasa","Rabu","Khamis","Jumaat"];
 const HARI_AR={Isnin:"الاثنين",Selasa:"الثلاثاء",Rabu:"الأربعاء",Khamis:"الخميس",Jumaat:"الجمعة"};
 const BIDANG_JAWI={"Al-Quran":"القرءان",Aqidah:"عقيدة",Akidah:"عقيدة",Ibadah:"عبادة",Sirah:"سيرة",Adab:"ادب",Jawi:"جاوي",Hadis:"حديث","Tasmik":"تسميع"};
 const SUBJ={PI:"Pendidikan Islam",BA:"Bahasa Arab",TAS:"Tasmik"};
-// Pustaka ayat aktiviti PI (Jawi): betulkan sekali di sini, terpakai pada semua RPH
-const PUSTAKA={
- permulaan:["موريد دمينتا برسديا دان برعاء سبلوم ممولاكن ڤمبلاجرن.","موريد مندڠر ڤرنڠن ݢورو مغناءي ادب دالم ڤمبلاجرن دان كندوڠن ڤلاجرن هاري اين."],
- perkembangan:["ݢورو ممڤركنلن ايسي ڤلاجرن ملالوءي سكرين <bdi>LCD</bdi> دان موريد دمينتا ممباچ برسام٢.","موريد ملقساناكن اكتيۋيتي بركومڤولن مڠيكوت تاهڤ ڤنچاڤاين: كومڤولن A, كومڤولن B دان كومڤولن C. <bdi>(Exemplar)</bdi>","ݢورو ممبيمبيڠ موريد يڠ ميميرلوكن بنتوان سمسا اكتيۋيتي ديجالنكن.","موريد ممبنتڠكن حاصيل كرجا كومڤولن دان موريد لاين مڠيكوتي دڠن بركسن.","ݢورو ممبوات ڤنتقسيرن ملالوءي لاتيهن دان حاصيل كرجا موريد."],
- penutup:["موريد ممبري كومنتر مغناءي اكتيۋيتي يڠ تله دلاكوكن باكي توجوان ڤمبهباءيقن. <bdi>(Learning Experience)</bdi>","موريد دبيمبيڠ ممبوات روموسن ڤلاجرن دان دمينتا مڠحياتي سرتا مڠعملكن ايسي ڤلاجرن."]
+/* ---------- pustaka ayat aktiviti (Jawi), mengikut gaya template RPH ---------- */
+const GRP="موريد دباهاكيكن كڤد تيݢ كومڤولن مڠيكوت تاهڤ ڤڠواساءن ياءيت چمرلڠ (A), سدرهان (B), دان لمه (C):";
+const DEF={
+ permulaan_quran:["موريد دمينتا برسديا دان برعاء سبلوم ممولاكن ڤمبلاجرن.","موريد مندڠر ڤرنڠن ݢورو برکاءيتن ادب ممباچ القرءان دان کلبيهن منحاک ادب ممباچ القرءان دغن بتول."],
+ permulaan_topik:["موريد دمينتا برسديا دان برعاء سبلوم ممولاكن ڤمبلاجرن.","موريد مندڠر ڤرنڠن ݢورو مغناءي ايسي ڤلاجرن هاري اين."],
+ perkembangan_quran:["موريد دبيمبيڠ لاتيه توبي ممباچ اقراء اتاو القرءان دغن سوارا يڠ جلس سچارا اينديۋيديو.","موريد دڤکيل اونتوق ممباچ دهادڤن ݢورو باکي توجوان سيمقن باچاءن. (Read and Highlight)",GRP,"> كومڤولن A: ممڤركاساكن باچاءن القرءان سهيڠݢ ختم سرتا ممبنتو مميمق باچاءن راكن. (Examplar)","> كومڤولن B: ممباچ سچارا برڤاسڠن دغن موريد تورس دغن بيمبيڠن ݢورو.","> كومڤولن C: لاتيه توبي ممبتولكن كساهن باچاءن دغن بيمبيڠن راكن دان ݢورو.","ݢورو مريكودكن هلامن موك سورت يڠ تله دباچ موريد كدالم ريكود تسميع."],
+ perkembangan_topik:["ݢورو ممڤركنلن ايسي ڤلاجرن دسكرين LCD دان منجلسكنڽ كڤد موريد.","موريد ملاكوكن اكتيۋيتي ڤرباحسن برڤاسڠن اونتوق مڠنل ڤستي ايسي ڤلاجرن. (Talk Partners)",GRP,"> كومڤولن A: ممبوات روموسن ايسي ڤلاجرن دان ممبنتڠكنڽ دهادڤن كلس. (Project Based Learning)","> كومڤولن B: ممباچ دان ممبينا ڤرتاڽاءن مڠناءي ايسي ڤلاجرن. (Jigsaw Reading)","> كومڤولن C: ممباچ دان مڠنل ڤستي ايسي ڤلاجرن دغن بيمبيڠن ݢورو. (Jigsaw Reading)","ݢورو ممبوات ڤنتقسيرن ملالوءي لاتيهن دان حاصيل كرجا موريد."],
+ perkembangan_jawi:["ݢورو ممڤركنلن ڤرکاتاءن دان ايات دسكرين LCD دان موريد دمينتا ممباچ مڠيكوت ݢورو.","موريد منوليس ڤرکاتاءن دان ايات دالم بوكو تولیس دغن بيمبيڠن ݢورو.",GRP,"> كومڤولن A: ممبينا ايات سنديري دان منوليسڽ دغن بتول.","> كومڤولن B: ممباچ دان منوليس ڤرکاتاءن دغن بيمبيڠن ݢورو.","> كومڤولن C: ممباچ دان منوليس سوكوكات دغن بيمبيڠن ݢورو.","ݢورو ممبوات ڤنتقسيرن ملالوءي لاتيهن دان حاصيل كرجا موريد."],
+ penutup_quran:["موريد ممبري كومنتر مغناءي اكتيۋيتي يڠ تله دلاكوكن باكي توجوان ڤمبهباءيقن. (Learning Experience)","موريد دبيمبيڠ ممبوات روموسن ڤلاجرن دان دري كالقن اونتوق سنتياس استقامه ممباچ دان بلاجر القرءان."],
+ penutup_topik:["موريد ممبري كومنتر مغناءي اكتيۋيتي يڠ تله دلاكوكن باكي توجوان ڤمبهباءيقن. (Learning Experience)","موريد دبيمبيڠ ممبوات روموسن ايسي ڤلاجرن ملالوءي ڤتا فيكيران. (i-Think)"],
+ tasmik_permulaan:["موريد دمينتا برسديا دغن ممبوك اقراء اتاو القرءان مغيكوت هلامن موك سورت ماسيڠ٢.","موريد مندڠر ڤرنڠن ݢورو برکاءيتن ادب ممباچ القرءان دان کلبيهن منحاک ادب ممباچ القرءان دغن بتول."],
+ tasmik_perkembangan:["موريد دبيمبيڠ لاتيه توبي ممباچ اقراء اتاو القرءان دغن سوارا يڠ جلس سچارا اينديۋيديو.","موريد دڤکيل اونتوق ممباچ دهادڤن ݢورو باکي توجوان سيمقن باچاءن. (Read and Highlight)",GRP,"> كومڤولن A: ممڤركاساكن باچاءن القرءان سهيڠݢ ختم سرتا ممبنتو مميمق باچاءن راكن. (Examplar)","> كومڤولن B: ممباچ سچارا برڤاسڠن دغن موريد تورس دغن بيمبيڠن ݢورو.","> كومڤولن C: لاتيه توبي ممبتولكن كساهن باچاءن دغن بيمبيڠن راكن دان ݢورو.","ݢورو مريكودكن هلامن موك سورت يڠ تله دباچ موريد كدالم ريكود تسميع."],
+ tasmik_penutup:["موريد ممبري كومنتر مغناءي اكتيۋيتي يڠ تله دلاكوكن باكي توجوان ڤمبهباءيقن. (Learning Experience)","موريد دبيمبيڠ ممبوات روموسن ڤلاجرن دان دري كالقن اونتوق سنتياس استقامه ممباچ دان بلاجر القرءان."]
 };
-const ROM=['i','ii','iii','iv','v','vi','vii','viii'];
+const PUS_LABEL={permulaan_quran:"PI Al-Quran: permulaan",permulaan_topik:"PI topik lain: permulaan",perkembangan_quran:"PI Al-Quran: perkembangan",perkembangan_topik:"PI Akidah, Ibadah, Sirah, Adab, Hadis: perkembangan",perkembangan_jawi:"PI Jawi: perkembangan",penutup_quran:"PI Al-Quran: penutup",penutup_topik:"PI topik lain: penutup",tasmik_permulaan:"Tasmik: permulaan",tasmik_perkembangan:"Tasmik: perkembangan",tasmik_penutup:"Tasmik: penutup"};
+const ROM=['i','ii','iii','iv','v','vi','vii','viii','ix','x'];
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const latin=s=>esc(s).replace(/[A-Za-z][A-Za-z0-9]*(?:[ .\-][A-Za-z0-9]+)*/g,m=>`<bdi>${m}</bdi>`);
 /* ---------- keadaan (disimpan pada pelayar jika boleh) ---------- */
-let S={penggalOverride:{},murid:{},capai:{},custom:{},minggu:null};
+let S={penggalOverride:{},murid:{},capai:{},custom:{},minggu:null,pustaka:{}};
 try{const r=localStorage.getItem('rph_penjana_v1'); if(r) S=Object.assign(S,JSON.parse(r));}catch(e){}
 function simpan(){try{localStorage.setItem('rph_penjana_v1',JSON.stringify(S));}catch(e){}}
+function baris(key){const t=S.pustaka[key];return (t!==undefined?t.split('\n'):DEF[key]).map(x=>x.trim()).filter(Boolean);}
 /* ---------- tarikh ---------- */
 function parse(iso){const [y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d);}
 function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
@@ -123,66 +142,72 @@ function masaLabel(m){const h=parseInt(m.split('.')[0],10);return (h>=7&&h<12)?'
 function jamKey(m){let [h,mm]=m.split('.').map(Number);if(h<7)h+=12;return h*60+mm;}
 function sesiMinggu(w){
   const mon=parse(w.mon);
-  return D.sesi.map(s=>({...s,tarikh:addDays(mon,HARI.indexOf(s.hari)),key:''})).sort((a,b)=>(a.tarikh-b.tarikh)||(jamKey(a.mula)-jamKey(b.mula))).map(s=>({...s,key:`${w.mon}|${s.hari}|${s.sub}|${s.thn}|${s.mula}`}));
+  return D.sesi.map(s=>({...s,tarikh:addDays(mon,HARI.indexOf(s.hari))})).sort((a,b)=>(a.tarikh-b.tarikh)||(jamKey(a.mula)-jamKey(b.mula))).map(s=>({...s,key:`${w.mon}|${s.hari}|${s.sub}|${s.thn}|${s.mula}`}));
 }
 const teach=D.cal.filter(w=>!w.off);
 function idxKandungan(w){return teach.findIndex(x=>x.no===w.no);}
 function sl(items,i,n){if(!items.length)return[];let a=Math.floor(i*items.length/n),b=Math.floor((i+1)*items.length/n);if(b<=a){a=Math.min(a,items.length-1);b=a+1;}return items.slice(a,b);}
 /* ---------- refleksi ---------- */
 function refl(s){
-  const m=parseInt(S.murid[s.thn]),c=parseInt(S.capai[s.key]);
-  if(Number.isFinite(m)&&Number.isFinite(c)&&c>=0&&c<=m)return{a:pad(c),t:pad(m-c),m:pad(m),ok:true};
-  return{a:'00',t:'00',m:'00',ok:false};
+  const m=parseInt(S.murid[s.thn],10), c=parseInt(S.capai[s.key],10);
+  const hasC=Number.isFinite(c), hasM=Number.isFinite(m);
+  if(hasC&&hasM&&c>=0&&c<=m)return{a:pad(c),t:pad(m-c),m:pad(m),ok:true};
+  if(hasC&&c>=0)return{a:pad(c),t:'00',m:hasM?pad(m):'00',ok:false};
+  return{a:'00',t:'00',m:hasM?pad(m):'00',ok:false};
 }
 /* ---------- pengepala (PI dan Tasmik) ---------- */
 function header(s,w,penggal,bidang,tajukHtml){
   return `<colgroup><col style="width:14%"><col style="width:3%"><col style="width:16.6%"><col style="width:16.6%"><col style="width:16.6%"><col style="width:16.6%"><col style="width:16.6%"></colgroup>
-<tr class="head"><td colspan="7" style="position:relative">RANCANGAN PENGAJARAN DAN PEMBELAJARAN HARIAN (RPH)<img src="${A.logo}" alt="" style="position:absolute;left:6px;top:2px;height:34px"></td></tr>
+<tr class="head" style="height:6%"><td colspan="7" style="position:relative">RANCANGAN PENGAJARAN DAN PEMBELAJARAN HARIAN (RPH)<img src="${A.logo}" alt="" style="position:absolute;left:6px;top:50%;transform:translateY(-50%);height:80%"></td></tr>
 <tr><td class="lab">ڤڠݢل / ميڠݢو</td><td class="c" colspan="2">${penggal}</td><td class="c">${w.no}</td><td class="lab">هاري / تاريخ</td><td class="c"><img class="day" src="${A.day[s.hari]}" alt="${s.hari}"></td><td class="c">${dmy(s.tarikh)}</td></tr>
-<tr><td class="lab">ماس</td><td class="c" colspan="2">${masaLabel(s.mula)}</td><td class="c">${s.mula}-${s.tamat}</td><td class="lab">كلس</td><td class="c" colspan="2"><span class="lat">${s.thn} CERDIK</span></td></tr>
+<tr><td class="lab">ماس</td><td class="c" colspan="2">${masaLabel(s.mula)}</td><td class="c">${s.mula}-${s.tamat}</td><td class="lab">كلس</td><td class="c" colspan="2"><span class="lat" style="font-size:1em">${s.thn} CERDIK</span></td></tr>
 <tr><td class="lab">مات ڤلاجرن / بيدڠ</td><td colspan="2" class="cj">قنديديقن إسلام</td><td class="cj">${BIDANG_JAWI[bidang]||bidang}</td><td class="lab">تاجوق</td><td colspan="2">${tajukHtml}</td></tr>`;
 }
-/* ---------- halaman Tasmik ---------- */
-function laman_tasmik(s,w,penggal){
-  const r=refl(s), x0=29.3,y0=140.2;
-  const pos=(x,top,t)=>`<span class="rn" style="left:${(x-x0).toFixed(1)}pt;top:${(top-y0).toFixed(1)}pt">${t}</span>`;
-  const rn=pos(424.8,541.4,r.a)+pos(444.2,541.4,r.m)+pos(424.8,565,r.t)+pos(444.2,565,r.m)+pos(434.5,541.4,'/')+pos(434.5,565,'/');
-  return `<div class="pg ta"><table>${header(s,w,penggal,'Tasmik','ممباچ اقراء / القرءان')}</table><div class="body"><img src="${A.tasmik}" alt="">${rn}</div></div>`;
+function numrows(label,lines){
+  const items=[];lines.forEach(l=>{if(l.startsWith('>')&&items.length)items[items.length-1].sub.push(l.slice(1).trim());else items.push({t:l,sub:[]});});
+  return items.map((it,i)=>`<tr>${i===0?`<td class="lab" rowspan="${items.length}">${label}</td>`:''}<td class="n">${ROM[i]}</td><td colspan="5">${latin(it.t)}${it.sub.map(x=>`<div class="sub2">${latin(x)}</div>`).join('')}</td></tr>`).join('');
 }
-/* ---------- halaman Pendidikan Islam ---------- */
+/* ---------- halaman RPH Jawi (PI dan Tasmik) ---------- */
+function laman_jawi(s,w,penggal,o){
+  /* o: bidang, tajuk, sk[[kod,teks]], sp[[kod,teks]], obj[], krit, permulaan[], perkembangan[], penutup[] */
+  const r=refl(s);
+  const kodHtml=k=>k?`<span class="lat">${esc(k)}</span> `:'';
+  const sk=o.sk.map(([k,t])=>kodHtml(k)+latin(t)).join('<br>');
+  const sp=o.sp.map(([k,t])=>kodHtml(k)+latin(t)).join('<br>');
+  return `<div class="pg" data-fs="12"><table>${header(s,w,penggal,o.bidang,latin(o.tajuk))}
+<tr><td class="lab">ستندرد كاندوڠن</td><td colspan="6">${sk}</td></tr>
+<tr><td class="lab">ستندرد ڤمبلاجرن</td><td colspan="6">${sp}</td></tr>
+<tr><td class="lab" rowspan="${o.obj.length+1}">اوبجيكتيف ڤلاجرن</td><td colspan="6">قد اخير ڤڠاجرن دان ڤمبلاجرن موريد دافت:</td></tr>
+${o.obj.map((t,i)=>`<tr><td class="n">${ROM[i]}</td><td colspan="5">${latin(t)}</td></tr>`).join('')}
+<tr><td class="lab">كريتريا كجاياءن</td><td colspan="6">${latin(o.krit)}</td></tr>
+${numrows('اكتيۋيتي ڤرمولاءن',o.permulaan)}
+${numrows('اكتيۋيتي ڤرکمبڠن',o.perkembangan)}
+${numrows('اكتيۋيتي ڤنوتوڤ',o.penutup)}
+<tr><td class="lab" rowspan="3">رفلكسي / اءمڤك</td><td colspan="4">اورڠ موريد دافت منجاڤاي اوبجيكتيف ڤمبلاجرن دان دبريكن لاتيهن ڤڠاياءن/ڤڠكوهن.</td><td colspan="2" class="c"><span class="lat" style="font-size:1em"><u>${r.a}</u> / <u>${r.m}</u></span></td></tr>
+<tr><td colspan="4">اورڠ موريد تيدق مڠواساءي اوبجيكتيف ڤمبلاجرن دان دبريكن لاتيهن ڤموليهن.</td><td colspan="2" class="c"><span class="lat" style="font-size:1em"><u>${r.t}</u> / <u>${r.m}</u></span></td></tr>
+<tr><td colspan="6">اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠكوهكن كران : تيدق بركناءن</td></tr>
+</table></div>`;
+}
+/* Tasmik: satu gaya sepanjang tahun, ikut template RPH Tasmik */
+function laman_tasmik(s,w,penggal){
+  const sk='ممباچ دان ممفردغركن (تسميع) باچاءن اقراء دان القرءان.';
+  const sp='ممباچ دان ممفردغركن (تسميع) حروف برباريس, كليمه ,ڤوتوڠن اية (اقراء) اتاو اية (القرءان).';
+  const x='حروف برباريس, كليمه ,ڤوتوڠن اية (اقراء) اتاو اية القرءان (القرءان)';
+  return laman_jawi(s,w,penggal,{bidang:'Tasmik',tajuk:'ممباچ اقراء / القرءان',sk:[['',sk]],sp:[['',sp]],
+    obj:['ممباچ '+x+' دغن بيمبيڠن ݢورو.','ممباچ '+x+' دغن بتول دان برتجويد.'],
+    krit:'موريد برجاي جك دافت ممباچ حروف برباريس, كليمه ,ڤوتوڠن اية اتاو اية القرءان سچارا تڤت.',
+    permulaan:baris('tasmik_permulaan'),perkembangan:baris('tasmik_perkembangan'),penutup:baris('tasmik_penutup')});
+}
+/* ---------- Pendidikan Islam: ikut DSKP dan RPT ---------- */
 function ringkasPI(chunk){
   const sks=[],seen={};
   chunk.forEach(c=>{if(!seen[c[1]]){seen[c[1]]=1;sks.push([c[1],c[2]]);}});
   return{bidang:chunk[0][0],sks,sps:chunk.map(c=>[c[3],c[4]])};
 }
-function numrows(label,items){
-  return items.map((t,i)=>`<tr>${i===0?`<td class="lab" rowspan="${items.length}">${label}</td>`:''}<td class="n">${ROM[i]}</td><td colspan="5">${t}</td></tr>`).join('');
-}
-function laman_pi(s,w,penggal,info){
-  const r=refl(s);
-  const sk=info.sks.map(([k,t])=>`${k?`<span class="lat">${esc(k)}</span> `:''}${esc(t)}`).join('<br>');
-  const sp=info.sps.map(([k,t])=>`${k?`<span class="lat">${esc(k)}</span> `:''}${esc(t)}`).join('<br>');
-  const obj=info.sps.map(([k,t])=>esc(t.replace(/\.$/,''))+' دغن بتول.');
-  const krit='موريد برجاي جك دافت '+info.sps.map(([k,t])=>esc(t.replace(/\.$/,''))).join(' دان ')+' سچارا تڤت.';
-  const P=PUSTAKA;
-  return `<div class="pg pi"><table>${header(s,w,penggal,info.bidang,esc(info.sks[0][1]))}
-<tr><td class="lab">ستندرد كاندوڠن</td><td colspan="6">${sk}</td></tr>
-<tr><td class="lab">ستندرد ڤمبلاجرن</td><td colspan="6">${sp}</td></tr>
-<tr><td class="lab" rowspan="${obj.length+1}">اوبجيكتيف ڤلاجرن</td><td colspan="6">قد اخير ڤڠاجرن دان ڤمبلاجرن موريد دافت:</td></tr>
-${obj.map((t,i)=>`<tr><td class="n">${ROM[i]}</td><td colspan="5">${t}</td></tr>`).join('')}
-<tr><td class="lab">كريتريا كجاياءن</td><td colspan="6">${krit}</td></tr>
-${numrows('اكتيۋيتي ڤرمولاءن',P.permulaan)}
-${numrows('اكتيۋيتي ڤرکمبڠن',P.perkembangan)}
-${numrows('اكتيۋيتي ڤنوتوڤ',P.penutup)}
-<tr><td class="lab" rowspan="3">رفلكسي / اءمڤك</td><td colspan="4">اورڠ موريد دافت منجاڤاي اوبجيكتيف ڤمبلاجرن دان دبريكن لاتيهن ڤڠاياءن/ڤڠكوهن.</td><td colspan="2" class="c"><u>${r.a}</u> / <u>${r.m}</u></td></tr>
-<tr><td colspan="4">اورڠ موريد تيدق مڠواساءي اوبجيكتيف ڤمبلاجرن دان دبريكن لاتيهن ڤموليهن.</td><td colspan="2" class="c"><u>${r.t}</u> / <u>${r.m}</u></td></tr>
-<tr><td colspan="6">اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠكوهكن كران : تيدق بركناءن</td></tr>
-</table></div>`;
-}
-function infoPI(s,idx,k,sesiKelas){
+function infoPI(s,idx,k){
   const c=S.custom[s.key];
-  if(c&&c.trim()){const t=c.trim();return{bidang:'Al-Quran',sks:[['','ممباچ '+t]],sps:[['','ممباچ '+t]],fokus:'Tajuk sendiri',kod:''};}
-  if(idx>=40)return{bidang:'Al-Quran',sks:[['','ڤڠوكوهن دان اولڠ كاجي']],sps:[['','ڤڠوكوهن دان اولڠ كاجي سموا تاجوق يڠ تله دڤلاجري']],fokus:'Pengukuhan',kod:''};
+  if(c&&c.trim()){const t='ممباچ '+c.trim();return{bidang:'Al-Quran',sks:[['',t]],sps:[['',t]],fokus:'Tajuk sendiri',custom:true};}
+  if(idx>=40){const t='ڤڠوكوهن دان اولڠ كاجي سموا تاجوق يڠ تله دڤلاجري';return{bidang:'Al-Quran',sks:[['',t]],sps:[['',t]],fokus:'Pengukuhan',custom:true};}
   const p=D.pi[s.thn];
   const c3=(idx%2===0)?sl(p.adab,Math.floor(idx/2),20):sl(p.jawi,Math.floor(idx/2),20);
   const ch=[sl(p.quran,idx,40),sl(p.teras,idx,40),c3][Math.min(k,2)];
@@ -190,7 +215,16 @@ function infoPI(s,idx,k,sesiKelas){
   r.fokus=r.bidang+' '+r.sps.map(x=>x[0]).join(', ');
   return r;
 }
-/* ---------- halaman Bahasa Arab ---------- */
+function laman_pi(s,w,penggal,i){
+  const prof=i.bidang==='Al-Quran'?'quran':(i.bidang==='Jawi'?'jawi':'topik');
+  const obj=i.sps.map(([k,t])=>t);
+  const krit='موريد برجاي جك دافت '+i.sps.map(([k,t])=>t.replace(/\.$/,'')).join(' دان ')+' سچارا تڤت.';
+  return laman_jawi(s,w,penggal,{bidang:i.bidang,tajuk:i.sks[0][1],sk:i.sks,sp:i.sps,obj,krit,
+    permulaan:baris(prof==='quran'?'permulaan_quran':'permulaan_topik'),
+    perkembangan:baris(prof==='quran'?'perkembangan_quran':(prof==='jawi'?'perkembangan_jawi':'perkembangan_topik')),
+    penutup:baris(prof==='quran'?'penutup_quran':'penutup_topik')});
+}
+/* ---------- Bahasa Arab: ikut DSKP dan RPT ---------- */
 const KBAT=["الذكر","التطبيق","التقييم","الفهم","التحليل","التركيب"];
 const EMK=["اللعبة اللغوية","التعليم الاقتصادية","الإبداع والابتكار","حب الوطن","القيمة","التكنولوجيا والمعلومات والاتصالات","رعاية العالمية","العلوم التكنولوجي","التجارية","رعاية البيئة","العلوم التكنولوجيا والهندسة"];
 const BBM=["كتاب المدرسي","مسلاط","كتاب التدريبات / كتاب المراجعة","الإنترنت","الراديو","صحف التدريبات / التوزيعات","التطبيق المادة","تطبيق / الصورة"];
@@ -216,7 +250,7 @@ const POLA=[
  {f:"Menulis: ayat mutanasiqah dan pengukuhan tema",k:[["3","mut"]]}];
 function infoBA(s,idx,k,n){
   const b=D.ba[s.thn];
-  if(idx>=40)return{tema:'مراجعة',sps:[['','مراجعة الموضوعات التي تم تعلمها وتعزيزها']],skill:'2',fokus:'Pengukuhan',kod:''};
+  if(idx>=40)return{tema:'مراجعة',sps:[['','مراجعة الموضوعات التي تم تعلمها وتعزيزها']],skill:'2',fokus:'Pengukuhan'};
   const tema=b.tema[Math.min(3,Math.floor(idx/10))].ar, pola=POLA[idx%10];
   let all=[];pola.k.forEach(([sk,kd])=>{const e=b.sk[sk+'.'+kd];if(e)all=all.concat(e.sps);});
   const mine=sl(all,k,n);
@@ -227,11 +261,11 @@ function laman_ba(s,w,info){
   const codes=info.sps.map(x=>x[0]).filter(Boolean).join('/');
   const obj=info.sps.map(x=>`<div>${esc(x[1].replace('القدرة على ',''))}</div>`).join('');
   const acts=[`يستمع التلاميذ إلى شرح المعلم عن موضوع الدرس: ${esc(info.tema)}.`].concat(info.sps.map(x=>'يمارس التلاميذ: '+esc(x[1].replace('القدرة على ','')))).concat(['يقوم التلاميذ بنشاط لغوي لتعزيز ما تعلموه.','يقوّم المعلم أداء التلاميذ ويقدم التغذية الراجعة.']);
-  const A1=r.ok?`<span class="ltr">${parseInt(r.a)}/${parseInt(r.m)}</span>`:'___/___';
-  const A2=r.ok?`<span class="ltr">${parseInt(r.t)}/${parseInt(r.m)}</span>`:'___/___';
-  return `<div class="pg ba"><table>
+  const A1=r.ok||r.a!=='00'?`<span class="ltr">${parseInt(r.a,10)}/${parseInt(r.m,10)}</span>`:'___/___';
+  const A2=r.ok?`<span class="ltr">${parseInt(r.t,10)}/${parseInt(r.m,10)}</span>`:'___/___';
+  return `<div class="pg ba" data-fs="11"><table>
 <colgroup><col style="width:15%"><col style="width:22%"><col style="width:6%"><col style="width:22%"><col style="width:6%"><col style="width:22%"><col style="width:7%"></colgroup>
-<tr class="ttl"><td colspan="7" style="padding:0"><table style="border:0"><tr><td style="border:0;background:#e7e6e6;font-size:20pt;font-weight:bold;text-align:right">خطة التدريس اليومية</td><td style="border:0;background:#e7e6e6;font-size:20pt;font-weight:bold;text-align:left">اللغة العربية</td></tr></table></td></tr>
+<tr class="ttl"><td colspan="7" style="padding:0"><table style="border:0;width:100%"><tr><td style="border:0;background:#e7e6e6;text-align:right">خطة التدريس اليومية</td><td style="border:0;background:#e7e6e6;text-align:left">اللغة العربية</td></tr></table></td></tr>
 <tr><td class="l">الفصل</td><td colspan="6" class="ltr" style="text-align:right">${s.thn} CERDIK</td></tr>
 <tr><td class="l">التاريخ ( اليوم )</td><td colspan="6" style="text-align:right"><span class="ltr">${dmyShort(d)}</span> (${HARI_AR[s.hari]})</td></tr>
 <tr><td class="l">الوقت</td><td colspan="6" class="ltr" style="text-align:right">${s.mula}-${s.tamat}</td></tr>
@@ -257,7 +291,14 @@ function jana(w){
     const nKelas=ses.filter(x=>x.sub===s.sub&&x.thn===s.thn).length;
     if(s.sub==='TAS')return{s,fokus:'Tasmik: iqra / al-Quran',html:laman_tasmik(s,w,penggal)};
     if(s.sub==='BA'){const i=infoBA(s,idx,k,nKelas);return{s,fokus:i.fokus,html:laman_ba(s,w,i)};}
-    const i=infoPI(s,idx,k,nKelas);return{s,fokus:i.fokus,html:laman_pi(s,w,penggal,i)};
+    const i=infoPI(s,idx,k);return{s,fokus:i.fokus,html:laman_pi(s,w,penggal,i)};
+  });
+}
+/* satu RPH satu muka surat: kecilkan tulisan sedikit jika kandungan melebihi A4 */
+function muat(){
+  document.querySelectorAll('.pg').forEach(pg=>{
+    let fs=parseFloat(pg.dataset.fs)||12; pg.style.fontSize=fs+'pt'; let g=0;
+    while(pg.scrollHeight>pg.clientHeight+1&&fs>6&&g<60){fs-=0.25;pg.style.fontSize=fs+'pt';g++;}
   });
 }
 /* ---------- antara muka ---------- */
@@ -265,7 +306,7 @@ const $=id=>document.getElementById(id);
 function pilihMingguAwal(){
   const t=new Date(); t.setHours(0,0,0,0);
   let best=D.cal[0];
-  for(const w of D.cal){const m=parse(w.mon); if(m<=addDays(t,0)||m<=addDays(t,2))best=w;}
+  for(const w of D.cal){const m=parse(w.mon); if(m<=addDays(t,2))best=w;}
   return best;
 }
 function bina(){
@@ -275,17 +316,29 @@ function bina(){
   const cur=hm&&D.cal.find(w=>w.no===+hm)?D.cal.find(w=>w.no===+hm):(S.minggu&&D.cal.find(w=>w.no===S.minggu)?D.cal.find(w=>w.no===S.minggu):pilihMingguAwal());
   sel.value=cur.no;
   $('murid').innerHTML=[1,2,3,4,5,6].map(t=>`<label>${t} CERDIK<input type="number" min="0" max="60" id="m${t}" value="${S.murid[t]??''}"></label>`).join('');
-  [1,2,3,4,5,6].forEach(t=>$('m'+t).addEventListener('input',e=>{S.murid[t]=e.target.value===''?undefined:parseInt(e.target.value,10);simpan();segar(false);}));
+  [1,2,3,4,5,6].forEach(t=>$('m'+t).addEventListener('input',e=>{if(e.target.value==='')delete S.murid[t];else S.murid[t]=parseInt(e.target.value,10);simpan();segar(false);}));
+  $('pus').innerHTML=Object.keys(DEF).map(k=>`<label>${PUS_LABEL[k]}<textarea rows="6" data-p="${k}">${esc(baris(k).join('\n'))}</textarea></label>`).join('');
+  $('pus').querySelectorAll('textarea').forEach(t=>t.addEventListener('input',e=>{S.pustaka[e.target.dataset.p]=e.target.value;simpan();segar(false);}));
+  $('pulih').addEventListener('click',()=>{S.pustaka={};simpan();$('pus').querySelectorAll('textarea').forEach(t=>{t.value=DEF[t.dataset.p].join('\n');});segar(false);});
   sel.addEventListener('change',()=>{S.minggu=parseInt(sel.value,10);simpan();segar(true);});
   $('penggal').addEventListener('input',e=>{const w=semasa();const v=parseInt(e.target.value,10);if(v>=1&&v<=4)S.penggalOverride[w.no]=v;else delete S.penggalOverride[w.no];simpan();segar(false);});
   $('cetak').addEventListener('click',()=>{try{window.print();}catch(e){}});
   segar(true);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(muat);
 }
 function semasa(){return D.cal.find(w=>w.no===parseInt($('minggu').value,10));}
+function semakAmaran(hasil){
+  const a=$('amaran'), msg=[];
+  const tanpaJumlah=hasil.filter(h=>Number.isFinite(parseInt(S.capai[h.s.key],10))&&!Number.isFinite(parseInt(S.murid[h.s.thn],10)));
+  if(tanpaJumlah.length)msg.push('Isi bilangan murid kelas '+[...new Set(tanpaJumlah.map(h=>h.s.thn+' CERDIK'))].join(', ')+' di langkah 1 supaya bahagian tidak capai dikira.');
+  const lebih=hasil.filter(h=>{const c=parseInt(S.capai[h.s.key],10),m=parseInt(S.murid[h.s.thn],10);return Number.isFinite(c)&&Number.isFinite(m)&&c>m;});
+  if(lebih.length)msg.push('Ada murid capai yang melebihi bilangan murid kelas. Semak semula nombor itu.');
+  a.hidden=!msg.length; a.textContent=msg.join(' ');
+}
 function segar(bangunBaris){
   const w=semasa(), pg=$('pratonton'), nota=$('notacuti');
   $('penggal').value=S.penggalOverride[w.no]||w.pg;
-  if(w.off){nota.hidden=false;nota.textContent=w.nota+'. Tiada RPH untuk minggu ini.';$('senarai').innerHTML='';pg.innerHTML='';$('bil').textContent='';$('bilsub').textContent='';return;}
+  if(w.off){nota.hidden=false;nota.textContent=w.nota+'. Tiada RPH untuk minggu ini.';$('senarai').innerHTML='';pg.innerHTML='';$('bil').textContent='';$('bilsub').textContent='';$('amaran').hidden=true;return;}
   nota.hidden=!w.nota; nota.textContent=w.nota;
   const hasil=jana(w);
   if(bangunBaris){
@@ -296,6 +349,8 @@ function segar(bangunBaris){
     hasil.forEach(h=>{const el=document.querySelector(`td[data-f="${CSS.escape(h.s.key)}"]`);if(el)el.textContent=h.fokus;});
   }
   pg.innerHTML=hasil.map(h=>h.html).join('');
+  muat();
+  semakAmaran(hasil);
   $('bil').textContent=hasil.length+' halaman RPH';
   $('bilsub').textContent='· Minggu '+w.no+', '+rg(parse(w.mon))+' hingga '+rg(addDays(parse(w.mon),4))+'. Tekan Cetak dan pilih Simpan sebagai PDF.';
 }
