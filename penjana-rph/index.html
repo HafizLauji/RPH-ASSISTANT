@@ -352,6 +352,7 @@ function segar(bangunBaris){
   muat();
   semakAmaran(hasil);
   document.title='RPH Minggu '+w.no+' ('+rg(parse(w.mon)).replace(' ','')+'-'+rg(addDays(parse(w.mon),4)).replace(' ','')+' '+parse(w.mon).getFullYear()+')';
+  {const m=parse(w.mon),f=addDays(m,4);document.title='RPH_Minggu'+w.no+'_'+m.getDate()+'-'+f.getDate()+BULAN[f.getMonth()]+f.getFullYear();}
   $('bil').textContent=hasil.length+' halaman RPH';
   $('bilsub').textContent='· Minggu '+w.no+', '+rg(parse(w.mon))+' hingga '+rg(addDays(parse(w.mon),4))+'. Tekan Cetak dan pilih Simpan sebagai PDF.';
 }
