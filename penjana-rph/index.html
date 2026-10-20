@@ -338,7 +338,7 @@ function semakAmaran(hasil){
 function segar(bangunBaris){
   const w=semasa(), pg=$('pratonton'), nota=$('notacuti');
   $('penggal').value=S.penggalOverride[w.no]||w.pg;
-  if(w.off){nota.hidden=false;nota.textContent=w.nota+'. Tiada RPH untuk minggu ini.';$('senarai').innerHTML='';pg.innerHTML='';$('bil').textContent='';$('bilsub').textContent='';$('amaran').hidden=true;return;}
+  if(w.off){document.title='RPH Minggu '+w.no+' (cuti)';nota.hidden=false;nota.textContent=w.nota+'. Tiada RPH untuk minggu ini.';$('senarai').innerHTML='';pg.innerHTML='';$('bil').textContent='';$('bilsub').textContent='';$('amaran').hidden=true;return;}
   nota.hidden=!w.nota; nota.textContent=w.nota;
   const hasil=jana(w);
   if(bangunBaris){
@@ -351,6 +351,7 @@ function segar(bangunBaris){
   pg.innerHTML=hasil.map(h=>h.html).join('');
   muat();
   semakAmaran(hasil);
+  document.title='RPH Minggu '+w.no+' ('+rg(parse(w.mon)).replace(' ','')+'-'+rg(addDays(parse(w.mon),4)).replace(' ','')+' '+parse(w.mon).getFullYear()+')';
   $('bil').textContent=hasil.length+' halaman RPH';
   $('bilsub').textContent='· Minggu '+w.no+', '+rg(parse(w.mon))+' hingga '+rg(addDays(parse(w.mon),4))+'. Tekan Cetak dan pilih Simpan sebagai PDF.';
 }
