@@ -49,7 +49,7 @@ table.l tr:last-child td{border-bottom:0}
 .pg .head td{background:#ffd966;text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-weight:bold;font-size:1.15em}
 .pg .lab{background:#fff2cc;font-weight:bold}
 .pg .n{text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.8em}
-.pg .lat{direction:ltr;unicode-bidi:embed;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.8em}
+.pg .lat{direction:ltr;unicode-bidi:isolate;display:inline-block;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.8em}
 .pg .c{text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.85em}
 .pg .cj{text-align:center}
 .pg .sub2{margin-top:2px}
@@ -59,6 +59,7 @@ table.l tr:last-child td{border-bottom:0}
 .pg.ba .ttl td{background:#e7e6e6;border:1px solid #000;font-size:1.8em;font-weight:bold;padding:4px 10px}
 .pg.ba .l{font-weight:bold}
 .pg.ba .g{background:#a9d18e}.pg.ba .b{background:#b4c6e7}.pg.ba .p{background:#d9b3ff}
+.pg .chk{font-family:'DejaVu Sans',sans-serif}
 .pg.ba .chk{text-align:center;font-size:1.2em;font-family:'DejaVu Sans',sans-serif}
 .pg.ba .sm{font-size:.92em}
 .pg.ba ul{margin:0;padding-right:18px;list-style:square}
@@ -89,11 +90,11 @@ table.l tr:last-child td{border-bottom:0}
   </div>
   <div id="notacuti" class="note" hidden></div>
   <div class="card">
-    <h2>1. Bilangan murid setiap kelas</h2>
+    <h2>1. Bilangan murid setiap kelas (pilihan, hanya jika mahu paparkan bilangan)</h2>
     <div class="murid" id="murid"></div>
   </div>
   <div id="amaran" class="note" hidden></div>
-  <div class="tw"><table class="l"><thead><tr><th>Hari</th><th>Masa</th><th>Kelas</th><th>Subjek</th><th>Fokus RPT</th><th>2. Murid capai</th><th>Tajuk sendiri (Jawi), pilihan</th></tr></thead><tbody id="senarai"></tbody></table></div>
+  <div class="tw"><table class="l"><thead><tr><th>Hari</th><th>Masa</th><th>Kelas</th><th>Subjek</th><th>Fokus RPT</th><th>2. Penguasaan murid</th><th>Tajuk sendiri (Jawi), pilihan</th></tr></thead><tbody id="senarai"></tbody></table></div>
   <details>
     <summary>Ayat aktiviti dalam RPH (boleh dibetulkan, satu ayat satu baris)</summary>
     <p class="sub" style="margin:6px 0 0">Baris yang bermula dengan &gt; menjadi baris kecil di bawah ayat sebelumnya, contohnya Kumpulan A, B dan C. Pembetulan disimpan dan terpakai pada semua RPH.</p>
@@ -139,7 +140,7 @@ const ROM=['i','ii','iii','iv','v','vi','vii','viii','ix','x'];
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const latin=s=>esc(s).replace(/[A-Za-z][A-Za-z0-9]*(?:[ .\-][A-Za-z0-9]+)*/g,m=>`<bdi>${m}</bdi>`);
 /* ---------- keadaan (disimpan pada pelayar jika boleh) ---------- */
-let S={penggalOverride:{},murid:{},capai:{},custom:{},minggu:null,pustaka:{}};
+let S={penggalOverride:{},murid:{},capai:{},tahap:{},custom:{},minggu:null,pustaka:{}};
 try{const r=localStorage.getItem('rph_penjana_v1'); if(r) S=Object.assign(S,JSON.parse(r));}catch(e){}
 function simpan(){try{localStorage.setItem('rph_penjana_v1',JSON.stringify(S));}catch(e){}}
 function baris(key){const t=S.pustaka[key];return (t!==undefined?t.split('\n'):DEF[key]).map(x=>x.trim()).filter(Boolean);}
@@ -161,12 +162,31 @@ const teach=D.cal.filter(w=>!w.off);
 function idxKandungan(w){return teach.findIndex(x=>x.no===w.no);}
 function sl(items,i,n){if(!items.length)return[];let a=Math.floor(i*items.length/n),b=Math.floor((i+1)*items.length/n);if(b<=a){a=Math.min(a,items.length-1);b=a+1;}return items.slice(a,b);}
 /* ---------- refleksi ---------- */
+const TAHAP_UI=[["","Belum diisi"],["A","Kebanyakan murid menguasai"],["B","Sebahagian murid menguasai"],["C","Ramai murid belum menguasai"],["T","Ditangguhkan"]];
+const RJ={A:["كباڽقن موريد مڠواساءي اوبجيكتيف ڤمبلاجرن ، \u2066TP 4 - TP 6\u2069.","دبريكن اكتيۋيتي ڤڠاياءن."],B:["سباهاݢيان موريد مڠواساءي اوبجيكتيف ڤمبلاجرن ، \u2066TP 3\u2069.","دبريكن لاتيهن ڤڠوكوهن."],C:["كباڽقن موريد بلوم مڠواساءي اوبجيكتيف ڤمبلاجرن ، \u2066TP 1 - TP 2\u2069.","دبريكن بيمبيڠن دان لاتيهن ڤموليهن، ڤمبلاجرن دأولڠ ڤد ڤرتموان ستروسڽ."]};
+const RA={A:["معظم التلاميذ حققوا أهداف التعلم (المستوى 4 - 6).","قُدمت لهم أنشطة الإثراء."],B:["بعض التلاميذ حققوا أهداف التعلم (المستوى 3).","قُدمت لهم تدريبات التعزيز."],C:["معظم التلاميذ لم يحققوا أهداف التعلم بعد (المستوى 1 - 2).","قُدم لهم العلاج الفردي وتُعاد الدرس في اللقاء القادم."]};
+const BJ={q:["ڤمرهاتين","باچاءن اينديۋيدو"],o:["ڤمرهاتين","سوال جواب ليسان","حاصيل كرجا"]};
+const BA_AR=["الملاحظة","الأسئلة الشفوية","أعمال التلاميذ"];
 function refl(s){
   const m=parseInt(S.murid[s.thn],10), c=parseInt(S.capai[s.key],10);
-  const hasC=Number.isFinite(c), hasM=Number.isFinite(m);
-  if(hasC&&hasM&&c>=0&&c<=m)return{a:pad(c),t:pad(m-c),m:pad(m),ok:true};
-  if(hasC&&c>=0)return{a:pad(c),t:'00',m:hasM?pad(m):'00',ok:false};
-  return{a:'00',t:'00',m:hasM?pad(m):'00',ok:false};
+  const bil=(Number.isFinite(c)&&Number.isFinite(m)&&c>=0&&c<=m)?`${pad(c)} / ${pad(m)}`:'';
+  return{tahap:S.tahap[s.key]||'',bil};
+}
+function reflJawi(s,r,quran){
+  const bukti=(quran?BJ.q:BJ.o).join('، ');
+  const box=k=>r.tahap===k?'☑':'☐';
+  const lv=(k,first)=>`<tr>${first?'<td class="lab" rowspan="5">رفلكسي / اءمڤك</td>':''}<td colspan="6"><span class="chk">${box(k)}</span> ${RJ[k][0]}${r.tahap===k?`<div class="sub2"><b>تيندقن سوسولن:</b> ${RJ[k][1]}${r.bil?` — ${r.bil.replace(" / "," دري ")} موريد`:''}</div>`:''}</td></tr>`;
+  return lv('A',true)+lv('B')+lv('C')+
+   `<tr><td colspan="6"><b>بوكتي ڤڠواساءن:</b> ${bukti}.</td></tr>`+
+   `<tr><td colspan="6"><span class="chk">${box('T')}</span> اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠݢوهكن كران : ${r.tahap==='T'?'.............................':'تيدق بركناءن'}</td></tr>`;
+}
+function reflArab(r,quran){
+  const box=k=>r.tahap===k?'☑':'☐';
+  const bukti=(quran?['الملاحظة','القراءة الفردية']:BA_AR).join('، ');
+  const lv=(k,first)=>`<tr>${first?'<td class="l p" rowspan="5">الملاحظة الذاتية</td>':''}<td colspan="6">${box(k)} ${RA[k][0]}${r.tahap===k?`<div><b>الإجراء اللاحق:</b> ${RA[k][1]}${r.bil?` — ${r.bil.replace(" / "," من ")} تلميذا`:''}</div>`:''}</td></tr>`;
+  return lv('A',true)+lv('B')+lv('C')+
+   `<tr><td colspan="6"><b>الشواهد:</b> ${bukti}.</td></tr>`+
+   `<tr><td colspan="6">${box('T')} تأجيل أنشطة التعليم والتعلم بسبب: ${r.tahap==='T'?'..............................':'لا ينطبق'}</td></tr>`;
 }
 /* ---------- pengepala (PI dan Tasmik) ---------- */
 function header(s,w,penggal,bidang,tajukHtml){
@@ -196,9 +216,7 @@ ${o.obj.map((t,i)=>`<tr><td class="n">${ROM[i]}</td><td colspan="5">${latin(t)}<
 ${numrows('اكتيۋيتي ڤرمولاءن',o.permulaan)}
 ${numrows('اكتيۋيتي ڤرکمبڠن',o.perkembangan)}
 ${numrows('اكتيۋيتي ڤنوتوڤ',o.penutup)}
-<tr><td class="lab" rowspan="3">رفلكسي / اءمڤك</td><td colspan="4">اورڠ موريد داڤت منچاڤاي اوبجيكتيف ڤمبلاجرن دان دبريكن لاتيهن ڤڠاياءن/ڤڠكوهن.</td><td colspan="2" class="c"><span class="lat" style="font-size:1em"><u>${r.a}</u> / <u>${r.m}</u></span></td></tr>
-<tr><td colspan="4">اورڠ موريد تيدق مڠواساءي اوبجيكتيف ڤمبلاجرن دان دبريكن لاتيهن ڤموليهن.</td><td colspan="2" class="c"><span class="lat" style="font-size:1em"><u>${r.t}</u> / <u>${r.m}</u></span></td></tr>
-<tr><td colspan="6">اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠݢوهكن كران : تيدق بركناءن</td></tr>
+${reflJawi(s,r,o.bidang==='Al-Quran'||o.bidang==='Tasmik')}
 </table></div>`;
 }
 /* Tasmik: satu gaya sepanjang tahun, ikut template RPH Tasmik */
@@ -259,7 +277,22 @@ function laman_pi(s,w,penggal,i){
   const krit='موريد برجاي جيك داڤت '+i.sps.map(([k,t])=>t.replace(/\.$/,'')).join(' دان ')+' سچارا تڤت.';
   return laman_jawi(s,w,penggal,{bidang:i.bidang,tajuk:i.sks[0][1],sk:i.sks,sp:i.sps,obj,krit,
     permulaan:baris(prof==='quran'?'permulaan_quran':'permulaan_topik'),
-    perkembangan:(()=>{const p=baris(prof==='quran'?'perkembangan_quran':(prof==='jawi'?'perkembangan_jawi':'perkembangan_topik'));const r=i.bk?rujukBK(s.thn,i.bk):null;if(r)p.splice(1,0,r);return p;})(),
+    perkembangan:(()=>{const p=baris(prof==='quran'?'perkembangan_quran':(prof==='jawi'?'perkembangan_jawi':'perkembangan_topik'));const r=i.bk?rujukBK(s.thn,i.bk):null;
+      const spt=i.sps.map(x=>x[1].replace(/[.\s]+$/,'')).filter(Boolean);
+      const sur=(spt.join(' ').match(/سورة\s+[\u0621-\u064A]+(?:\s+[\u0621-\u064A]+)?/)||[])[0];
+      const ab=['A','B','C'];
+      p.forEach((l,n)=>{
+        if(!l.startsWith('> كومڤولن'))return;
+        const g=ab.indexOf(l.charAt(10)); if(g<0)return;
+        const lab=(l.match(/\([^)]*\)\s*$/)||[''])[0];
+        if(sur&&prof==='quran'){p[n]=l.replace('ممباچ القرءان',`ممباچ ${sur}`);return;}
+        if(!spt.length)return;
+        const sp=spt[g%spt.length];
+        const pre=g===0?'ممبوات روموسن دان ممبنتڠكن اونتوق':(g===1?'ممباچ دان ممبينا ڤرتاڽاءن اونتوق':'دبيمبيڠ ݢورو اونتوق');
+        p[n]=`> كومڤولن ${ab[g]}: ${pre} ${sp}. ${lab}`.trim();
+      });
+      if(sur&&prof==='quran')p.forEach((l,n)=>{if(l.startsWith('موريد دبيمبيڠ لاتيه توبي'))p[n]=l.replace('اقراء اتاو القرءان',sur);});
+      if(r)p.splice(1,0,r);return p;})(),
     penutup:baris(prof==='quran'?'penutup_quran':'penutup_topik')});
 }
 /* ---------- Bahasa Arab: ikut DSKP dan RPT ---------- */
@@ -303,8 +336,6 @@ function laman_ba(s,w,info){
   const codes=info.sps.map(x=>x[0]).filter(Boolean).join('/');
   const obj=info.sps.map(x=>`<div>${esc(x[1].replace('القدرة على ',''))}</div>`).join('');
   const acts=[`يستمع التلاميذ إلى شرح المعلم عن موضوع الدرس: ${esc(info.tema)}.`].concat(info.bkt?[esc(info.bkt)]:[]).concat(info.sps.map(x=>'يمارس التلاميذ: '+esc(x[1].replace('القدرة على ','')))).concat(['يقوم التلاميذ بنشاط لغوي لتعزيز ما تعلموه.','يقوّم المعلم أداء التلاميذ ويقدم التغذية الراجعة.']);
-  const A1=r.ok||r.a!=='00'?`<span class="ltr">${parseInt(r.a,10)}/${parseInt(r.m,10)}</span>`:'___/___';
-  const A2=r.ok?`<span class="ltr">${parseInt(r.t,10)}/${parseInt(r.m,10)}</span>`:'___/___';
   return `<div class="pg ba" data-fs="11"><table>
 <colgroup><col style="width:15%"><col style="width:22%"><col style="width:6%"><col style="width:22%"><col style="width:6%"><col style="width:22%"><col style="width:7%"></colgroup>
 <tr class="ttl"><td colspan="7" style="padding:0"><table style="border:0;width:100%"><tr><td style="border:0;background:#e7e6e6;text-align:right">خطة التدريس اليومية</td><td style="border:0;background:#e7e6e6;text-align:left">اللغة العربية</td></tr></table></td></tr>
@@ -317,11 +348,7 @@ function laman_ba(s,w,info){
 <tr><td class="l g">الأهداف / معايير النجاح</td><td colspan="6" style="vertical-align:top">في نهاية الدرس، يتمكن التلاميذ من:${obj}</td></tr>
 <tr><td class="l g">الأنشطة</td><td colspan="6" style="vertical-align:top"><ul>${acts.map(a=>`<li>${a}</li>`).join('')}</ul></td></tr>
 ${grid('مهارات التفكير العليا',KBAT,t[0])}${grid('العناصر عبر المنهج',EMK,t[1])}${grid('الوسائل المعينة',BBM,t[2])}${grid('تقويم التعليم والتعلم',PENT,t[3])}${grid('خرائط التفكير',PETA,t[4])}
-<tr><td class="l p" rowspan="5">الملاحظة الذاتية</td><td colspan="6">${A1} تلميذا حققوا أهداف التعلم وأُعطوا أنشطة الإثراء.</td></tr>
-<tr><td colspan="6">${A2} تلميذا لم يحققوا أهداف التعلم وأُعطوا أنشطة العلاج.</td></tr>
-<tr><td colspan="6">تأجيل أنشطة التعليم والتعلم بسبب: &nbsp; ☐ اجتماع &nbsp; ☐ برنامج المدرسة &nbsp; ☐ نشاط خارجي للتلاميذ &nbsp; ☐ إجازة &nbsp; ☐ عطلة طارئة &nbsp; ☐ عطلة عامة &nbsp; ☐ عطلة خاصة</td></tr>
-<tr><td colspan="6">أخرى: ......................................</td></tr>
-<tr><td colspan="6">تُرحَّل أنشطة التعليم والتعلم إلى الأسبوع: ...............</td></tr>
+${reflArab(r,false)}
 </table></div>`;
 }
 /* ---------- penjanaan ---------- */
@@ -366,7 +393,7 @@ function bina(){
   $('penggal').addEventListener('input',e=>{const w=semasa();const v=parseInt(e.target.value,10);if(v>=1&&v<=4)S.penggalOverride[w.no]=v;else delete S.penggalOverride[w.no];simpan();segar(false);});
   $('sandar').addEventListener('click',()=>{const b=new Blob([JSON.stringify({rph:1,tarikh:new Date().toISOString(),data:S})],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);const n=new Date();a.download='rph-sandaran-'+n.getFullYear()+pad(n.getMonth()+1)+pad(n.getDate())+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);});
   $('buka').addEventListener('click',()=>$('fail').click());
-  $('fail').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.rph!==1||!o.data)throw 0;if(!confirm('Gantikan semua isian sekarang dengan isi fail sandaran ini?'))return;S=Object.assign({penggalOverride:{},murid:{},capai:{},custom:{},minggu:null,pustaka:{}},o.data);simpan();location.reload();}catch(x){alert('Fail ini bukan fail sandaran RPH yang sah.');}};r.readAsText(f);e.target.value='';});
+  $('fail').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.rph!==1||!o.data)throw 0;if(!confirm('Gantikan semua isian sekarang dengan isi fail sandaran ini?'))return;S=Object.assign({penggalOverride:{},murid:{},capai:{},tahap:{},custom:{},minggu:null,pustaka:{}},o.data);simpan();location.reload();}catch(x){alert('Fail ini bukan fail sandaran RPH yang sah.');}};r.readAsText(f);e.target.value='';});
   $('cetak').addEventListener('click',()=>{try{window.print();}catch(e){}});
   segar(true);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(muat);
@@ -374,8 +401,6 @@ function bina(){
 function semasa(){return D.cal.find(w=>w.no===parseInt($('minggu').value,10));}
 function semakAmaran(hasil){
   const a=$('amaran'), msg=[];
-  const tanpaJumlah=hasil.filter(h=>Number.isFinite(parseInt(S.capai[h.s.key],10))&&!Number.isFinite(parseInt(S.murid[h.s.thn],10)));
-  if(tanpaJumlah.length)msg.push('Isi bilangan murid kelas '+[...new Set(tanpaJumlah.map(h=>h.s.thn+' CERDIK'))].join(', ')+' di langkah 1 supaya bahagian tidak capai dikira.');
   const lebih=hasil.filter(h=>{const c=parseInt(S.capai[h.s.key],10),m=parseInt(S.murid[h.s.thn],10);return Number.isFinite(c)&&Number.isFinite(m)&&c>m;});
   if(lebih.length)msg.push('Ada murid capai yang melebihi bilangan murid kelas. Semak semula nombor itu.');
   a.hidden=!msg.length; a.textContent=msg.join(' ');
@@ -387,7 +412,8 @@ function segar(bangunBaris){
   nota.hidden=!w.nota; nota.textContent=w.nota;
   const hasil=jana(w);
   if(bangunBaris){
-    $('senarai').innerHTML=hasil.map(h=>{const s=h.s;return `<tr><td>${s.hari} ${s.tarikh.getDate()}/${s.tarikh.getMonth()+1}</td><td>${s.mula}–${s.tamat}</td><td>${s.thn} CERDIK</td><td><span class="tag t-${s.sub}">${SUBJ[s.sub]}</span></td><td class="fokus" data-f="${esc(s.key)}">${esc(h.fokus)}</td><td><input type="number" min="0" max="60" data-c="${esc(s.key)}" value="${S.capai[s.key]??''}" aria-label="Murid capai ${esc(s.key)}"></td><td>${s.sub==='PI'?`<input type="text" data-x="${esc(s.key)}" dir="rtl" style="width:100%;min-width:150px" value="${esc(S.custom[s.key]||'')}" placeholder="Taip surah/ayat dalam Jawi">`:''}</td></tr>`;}).join('');
+    $('senarai').innerHTML=hasil.map(h=>{const s=h.s;return `<tr><td>${s.hari} ${s.tarikh.getDate()}/${s.tarikh.getMonth()+1}</td><td>${s.mula}–${s.tamat}</td><td>${s.thn} CERDIK</td><td><span class="tag t-${s.sub}">${SUBJ[s.sub]}</span></td><td class="fokus" data-f="${esc(s.key)}">${esc(h.fokus)}</td><td><select data-t="${esc(s.key)}" aria-label="Penguasaan ${esc(s.key)}">${TAHAP_UI.map(([v,l])=>`<option value="${v}"${(S.tahap[s.key]||'')===v?' selected':''}>${l}</option>`).join('')}</select> <input type="number" min="0" max="60" data-c="${esc(s.key)}" value="${S.capai[s.key]??''}" placeholder="bil. (pilihan)" title="Bilangan murid menguasai, pilihan" style="width:96px"></td><td>${s.sub==='PI'?`<input type="text" data-x="${esc(s.key)}" dir="rtl" style="width:100%;min-width:150px" value="${esc(S.custom[s.key]||'')}" placeholder="Taip surah/ayat dalam Jawi">`:''}</td></tr>`;}).join('');
+    $('senarai').querySelectorAll('select[data-t]').forEach(i=>i.addEventListener('change',e=>{const k=e.target.dataset.t;if(!e.target.value)delete S.tahap[k];else S.tahap[k]=e.target.value;simpan();segar(false);}));
     $('senarai').querySelectorAll('input[data-c]').forEach(i=>i.addEventListener('input',e=>{const k=e.target.dataset.c;if(e.target.value==='')delete S.capai[k];else S.capai[k]=parseInt(e.target.value,10);simpan();segar(false);}));
     $('senarai').querySelectorAll('input[data-x]').forEach(i=>i.addEventListener('input',e=>{const k=e.target.dataset.x;if(e.target.value.trim()==='')delete S.custom[k];else S.custom[k]=e.target.value;simpan();segar(false);}));
   } else {
