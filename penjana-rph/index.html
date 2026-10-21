@@ -82,6 +82,9 @@ table.l tr:last-child td{border-bottom:0}
     <label>Minggu persekolahan<select id="minggu"></select></label>
     <label>Penggal<input type="number" id="penggal" min="1" max="4"></label>
     <span class="grow"></span>
+    <button id="sandar" type="button" class="sec">Simpan sandaran</button>
+    <button id="buka" type="button" class="sec">Buka sandaran</button>
+    <input type="file" id="fail" accept=".json,application/json" hidden>
     <button id="cetak" type="button">Cetak / Simpan PDF</button>
   </div>
   <div id="notacuti" class="note" hidden></div>
@@ -332,6 +335,9 @@ function bina(){
   $('pulih').addEventListener('click',()=>{S.pustaka={};simpan();$('pus').querySelectorAll('textarea').forEach(t=>{t.value=DEF[t.dataset.p].join('\n');});segar(false);});
   sel.addEventListener('change',()=>{S.minggu=parseInt(sel.value,10);simpan();segar(true);});
   $('penggal').addEventListener('input',e=>{const w=semasa();const v=parseInt(e.target.value,10);if(v>=1&&v<=4)S.penggalOverride[w.no]=v;else delete S.penggalOverride[w.no];simpan();segar(false);});
+  $('sandar').addEventListener('click',()=>{const b=new Blob([JSON.stringify({rph:1,tarikh:new Date().toISOString(),data:S})],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);const n=new Date();a.download='rph-sandaran-'+n.getFullYear()+pad(n.getMonth()+1)+pad(n.getDate())+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);});
+  $('buka').addEventListener('click',()=>$('fail').click());
+  $('fail').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.rph!==1||!o.data)throw 0;if(!confirm('Gantikan semua isian sekarang dengan isi fail sandaran ini?'))return;S=Object.assign({penggalOverride:{},murid:{},capai:{},custom:{},minggu:null,pustaka:{}},o.data);simpan();location.reload();}catch(x){alert('Fail ini bukan fail sandaran RPH yang sah.');}};r.readAsText(f);e.target.value='';});
   $('cetak').addEventListener('click',()=>{try{window.print();}catch(e){}});
   segar(true);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(muat);
