@@ -135,7 +135,26 @@ const DEF={
  tasmik_perkembangan:[Q1,Q2,GRP,QA,QB,QC,QR],
  tasmik_penutup:[PN1,PN2q]
 };
-const PUS_LABEL={permulaan_quran:"PI Al-Quran: permulaan",permulaan_topik:"PI topik lain: permulaan",perkembangan_quran:"PI Al-Quran: perkembangan",perkembangan_topik:"PI Akidah, Ibadah, Sirah, Adab, Hadis: perkembangan",perkembangan_jawi:"PI Jawi: perkembangan",penutup_quran:"PI Al-Quran: penutup",penutup_topik:"PI topik lain: penutup",tasmik_permulaan:"Tasmik: permulaan",tasmik_perkembangan:"Tasmik: perkembangan",tasmik_penutup:"Tasmik: penutup"};
+const LCD="ݢورو ممڤركنلكن ايسي ڤلاجرن دسكرين LCD دان منجلسكنڽ كڤد موريد.";
+const TP_="موريد ملاكوكن اكتيۋيتي ڤرباحسن برڤاسڠن اونتوق مڠنل ڤستي ايسي ڤلاجرن. (Talk Partners)";
+const AB=["> كومڤولن A: ","> كومڤولن B: ","> كومڤولن C: "];
+const ASES="ݢورو ممبوات ڤنتقسيرن ملالوءي لاتيهن دان حاصيل كرجا موريد.";
+const PNX="موريد برجنجي اونتوق مڠامالكن نيلاي يڠ دڤلاجري دالم كهيدوڤن هاريان.";
+const DEF2={
+ permulaan_ibadah:[R1,"ݢورو ممڤرليهتكن ݢمبر اتاو ۏيديو ڤندق بركاءيتن ايسي ڤلاجرن هاري اين."],
+ permulaan_sirah:[R1,"ݢورو مڠيمبس كمبالي ڤلاجرن لالو دڠن منجاجاكن ڤرتاڽاءن ڤمولا."],
+ perk_akidah:[LCD,"موريد مڠنل ڤستي دان مڽبوت دليل نقلي (ايات القرءان اتاو حديث) يڠ بركاءيتن دڠن ايسي ڤلاجرن.",TP_,GRP,AB[0]+"(Project Based Learning)",AB[1]+"(Jigsaw Reading)",AB[2]+"(Jigsaw Reading)",ASES],
+ perk_ibadah:[LCD,"ݢورو ملاكوكن دمونستراسي لڠكه۲ سچارا تيرتب دان موريد مڽمق دڠن تليتي.","موريد منچوبا لڠكه۲ يڠ دتونجوقكن سچارا برڤاسڠن دان ساليڠ ممبتولكن كسلاهن. (Peer Teaching)",GRP,AB[0]+"(Project Based Learning)",AB[1]+"(Jigsaw Reading)",AB[2]+"(Jigsaw Reading)","ݢورو ممبوات ڤنتقسيرن ملالوءي ڤمرهاتين ڤراكتيكل موريد."],
+ perk_sirah:[LCD,"موريد مندڠر كيسه ملالوءي ݢورو اتاو كليڤ ۏيديو مڠناءي ڤريستيوا يڠ بركاءيتن.","موريد مڠنل ڤستي اعتبار دان ڤلاجرن يڠ بوليه دجادي چونتوه دان ملاكوكن ڤرباحسن برڤاسڠن. (Talk Partners)",GRP,AB[0]+"(Project Based Learning)",AB[1]+"(Jigsaw Reading)",AB[2]+"(Jigsaw Reading)",ASES],
+ perk_adab:[LCD,"ݢورو ممڤرليهتكن سيتواسي (ݢمبر اتاو ۏيديو) يڠ منونجوقكن ادب يڠ بتول دان يڠ ساله، لالو موريد مڠنل ڤستي.","موريد ملاكوكن ڤرانن مڠيكوت ادب يڠ دڤلاجري. (Role Play)",GRP,AB[0]+"(Project Based Learning)",AB[1]+"(Role Play)",AB[2]+"(Role Play)",ASES],
+ perk_hadis:[LCD,"ݢورو ممباچ حديث دڠن بتول دان موريد مڠيكوت باچاءن ݢورو سچارا بركومڤولن.","ݢورو منجلسكن ترجمهن دان مقصود حديث، كمودين موريد ملاكوكن ڤرباحسن برڤاسڠن. (Talk Partners)",GRP,AB[0]+"(Project Based Learning)",AB[1]+"(Jigsaw Reading)",AB[2]+"(Jigsaw Reading)",ASES],
+ perk_hafazan:["موريد مندڠر باچاءن ايات دري ݢورو بركالي۲ سهيڠݢ حفظ.","موريد دبيمبيڠ مڠحفظ ايات سچارا بركومڤولن دان اينديۋيدو.",GRP,"> كومڤولن A: مڠحفظ {S} دڠن لنچر دان تسميع كڤد ݢورو. (Exemplar)","> كومڤولن B: مڠحفظ {S} سچارا برڤاسڠن دان ساليڠ مڽمق.","> كومڤولن C: مڠحفظ {S} ايات دڠن ايات دڠن بيمبيڠن ݢورو دان راكن.",QR.replace('تله دباچ','تله دحفظ')],
+ penutup_ibadah:[PN1,"موريد ملاكوكن ڤراكتيس امالي سچارا اينديۋيدو دان ݢورو مڽمق."],
+ penutup_nilai:[PN1,PNX],
+ penutup_hafazan:[PN1,"موريد برجنجي اونتوق مڠولڠ حفظن دي رومه."]
+};
+const PUS_LABEL={permulaan_ibadah:'PI Ibadah: permulaan',permulaan_sirah:'PI Sirah: permulaan',perk_akidah:'PI Akidah: perkembangan',perk_ibadah:'PI Ibadah: perkembangan',perk_sirah:'PI Sirah: perkembangan',perk_adab:'PI Adab: perkembangan',perk_hadis:'PI Hadis: perkembangan',perk_hafazan:'PI Al-Quran hafazan: perkembangan ({S} = nama surah)',penutup_ibadah:'PI Ibadah: penutup',penutup_nilai:'PI Sirah, Adab, Hadis: penutup',penutup_hafazan:'PI hafazan: penutup',permulaan_quran:"PI Al-Quran: permulaan",permulaan_topik:"PI topik lain: permulaan",perkembangan_quran:"PI Al-Quran: perkembangan",perkembangan_topik:"PI Akidah, Ibadah, Sirah, Adab, Hadis: perkembangan",perkembangan_jawi:"PI Jawi: perkembangan",penutup_quran:"PI Al-Quran: penutup",penutup_topik:"PI topik lain: penutup",tasmik_permulaan:"Tasmik: permulaan",tasmik_perkembangan:"Tasmik: perkembangan",tasmik_penutup:"Tasmik: penutup"};
+Object.assign(DEF,DEF2);
 const ROM=['i','ii','iii','iv','v','vi','vii','viii','ix','x'];
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const latin=s=>esc(s).replace(/[A-Za-z][A-Za-z0-9]*(?:[ .\-][A-Za-z0-9]+)*/g,m=>`<bdi>${m}</bdi>`);
@@ -273,27 +292,35 @@ function infoPI(s,idx,k){
 }
 function laman_pi(s,w,penggal,i){
   const prof=i.bidang==='Al-Quran'?'quran':(i.bidang==='Jawi'?'jawi':'topik');
+  const bd=({Aqidah:'akidah',Akidah:'akidah',Ibadah:'ibadah',Sirah:'sirah',Adab:'adab',Hadis:'hadis'})[i.bidang]||'';
   const obj=i.sps.map(([k,t])=>t);
   const krit='موريد برجاي جيك داڤت '+i.sps.map(([k,t])=>t.replace(/\.$/,'')).join(' دان ')+' سچارا تڤت.';
   return laman_jawi(s,w,penggal,{bidang:i.bidang,tajuk:i.sks[0][1],sk:i.sks,sp:i.sps,obj,krit,
-    permulaan:baris(prof==='quran'?'permulaan_quran':'permulaan_topik'),
-    perkembangan:(()=>{const p=baris(prof==='quran'?'perkembangan_quran':(prof==='jawi'?'perkembangan_jawi':'perkembangan_topik'));const r=i.bk?rujukBK(s.thn,i.bk):null;
+    permulaan:baris(prof==='quran'?'permulaan_quran':(bd==='ibadah'?'permulaan_ibadah':(bd==='sirah'?'permulaan_sirah':'permulaan_topik'))),
+    perkembangan:(()=>{
       const spt=i.sps.map(x=>x[1].replace(/[.\s]+$/,'')).filter(Boolean);
-      const sur=(spt.join(' ').match(/سورة\s+[\u0621-\u064A]+(?:\s+[\u0621-\u064A]+)?/)||[])[0];
+      const sur=(spt.join(' ').match(/سورة\s+[\u0621-\u064A]+/)||[])[0];
+      const haf=prof==='quran'&&/حفظ/.test(spt.join(' '));
+      const kunci=prof==='quran'?(haf?'perk_hafazan':'perkembangan_quran'):(prof==='jawi'?'perkembangan_jawi':({akidah:'perk_akidah',ibadah:'perk_ibadah',sirah:'perk_sirah',adab:'perk_adab',hadis:'perk_hadis'}[bd]||'perkembangan_topik'));
+      const p=baris(kunci);const r=i.bk?rujukBK(s.thn,i.bk):null;
       const ab=['A','B','C'];
       p.forEach((l,n)=>{
+        if(l.includes('{S}'))p[n]=l.replace(/\{S\}/g,sur||'اية');
         if(!l.startsWith('> كومڤولن'))return;
+        if(haf||(!spt.length))return;
         const g=ab.indexOf(l.charAt(10)); if(g<0)return;
         const lab=(l.match(/\([^)]*\)\s*$/)||[''])[0];
-        if(sur&&prof==='quran'){p[n]=l.replace('ممباچ القرءان',`ممباچ ${sur}`);return;}
-        if(!spt.length)return;
         const sp=spt[g%spt.length];
+        if(prof==='quran'){
+          if(sur){p[n]=l.replace('ممباچ القرءان',`ممباچ ${sur}`);return;}
+          p[n]=[`> كومڤولن A: لاتيه توبي ${sp} دڠن لنچر. ${lab}`,`> كومڤولن B: ${sp} سچارا برڤاسڠن دڠن موريد لاءين. ${lab}`,`> كومڤولن C: ${sp} دڠن بيمبيڠن ݢورو دان راكن. ${lab}`][g].trim();return;
+        }
         const pre=g===0?'ممبوات روموسن دان ممبنتڠكن اونتوق':(g===1?'ممباچ دان ممبينا ڤرتاڽاءن اونتوق':'دبيمبيڠ ݢورو اونتوق');
         p[n]=`> كومڤولن ${ab[g]}: ${pre} ${sp}. ${lab}`.trim();
       });
-      if(sur&&prof==='quran')p.forEach((l,n)=>{if(l.startsWith('موريد دبيمبيڠ لاتيه توبي'))p[n]=l.replace('اقراء اتاو القرءان',sur);});
+      if(sur&&prof==='quran'&&!haf)p.forEach((l,n)=>{if(l.startsWith('موريد دبيمبيڠ لاتيه توبي'))p[n]=l.replace('اقراء اتاو القرءان',sur);});
       if(r)p.splice(1,0,r);return p;})(),
-    penutup:baris(prof==='quran'?'penutup_quran':'penutup_topik')});
+    penutup:baris(prof==='quran'?(/حفظ/.test(i.sps.map(x=>x[1]).join(' '))?'penutup_hafazan':'penutup_quran'):(bd==='ibadah'?'penutup_ibadah':((bd==='sirah'||bd==='adab'||bd==='hadis')?'penutup_nilai':'penutup_topik')))});
 }
 /* ---------- Bahasa Arab: ikut DSKP dan RPT ---------- */
 const KBAT=["التذكر","التطبيق","التقييم","الفهم","التحليل","الإبداع"];
@@ -329,13 +356,17 @@ function infoBA(s,idx,k,n){
   const bkt=`يفتح التلاميذ الكتاب المدرسي، الوحدة ${ORD[q]}: ${tema} (الصفحة ${AR_NUM(bk[0])} - ${AR_NUM(bk[1])}).`;
   let all=[];pola.k.forEach(([sk,kd])=>{const e=b.sk[sk+'.'+kd];if(e)all=all.concat(e.sps);});
   const mine=sl(all,k,n);
-  return{tema,bkt,sps:mine,skill:pola.k[0][0],fokus:pola.f.split(':')[0]+' · '+mine.map(x=>x[0]).join(', ')};
+  return{tema,bkt,kd:pola.k[0][1],sps:mine,skill:pola.k[0][0],fokus:pola.f.split(':')[0]+' · '+mine.map(x=>x[0]).join(', ')};
 }
 function laman_ba(s,w,info){
   const r=refl(s), t=TICK[info.skill], d=s.tarikh;
   const codes=info.sps.map(x=>x[0]).filter(Boolean).join('/');
   const obj=info.sps.map(x=>`<div>${esc(x[1].replace('القدرة على ',''))}</div>`).join('');
-  const acts=[`يستمع التلاميذ إلى شرح المعلم عن موضوع الدرس: ${esc(info.tema)}.`].concat(info.bkt?[esc(info.bkt)]:[]).concat(info.sps.map(x=>'يمارس التلاميذ: '+esc(x[1].replace('القدرة على ','')))).concat(['يقوم التلاميذ بنشاط لغوي لتعزيز ما تعلموه.','يقوّم المعلم أداء التلاميذ ويقدم التغذية الراجعة.']);
+  const ACT={"1":{huruf:"ينطق المعلم أصوات الحروف في كلمات الموضوع، ويردد التلاميذ بعده فرديا وجماعيا.",kata:"يستمع التلاميذ إلى كلمات الموضوع ويرددونها بعد المعلم، ثم يحددون الكلمات المسموعة ويصنفونها.",ayat:"يستمع التلاميذ إلى الجمل البسيطة عن الموضوع ويرددونها بنطق صحيح مع مراعاة النبر والتنغيم، ثم يمثلونها ارتجاليا.",mut:"يستمع التلاميذ إلى الجمل المتناسقة عن الموضوع ويرددونها مع مراعاة النبر والتنغيم، ثم يكوّنون جملا متناسقة شفويا."},
+   "2":{huruf:"يقرأ المعلم الكلمات التي فيها الحروف المستهدفة، ثم يقرأ التلاميذ بعده ويحددون أصوات الحروف في الكلمات المقروءة.",kata:"يقرأ التلاميذ كلمات الموضوع بعد المعلم مع مراعاة النبر، ثم يحددون الكلمات المقروءة ويصنفونها.",ayat:"يقرأ التلاميذ الجمل البسيطة عن الموضوع بعد المعلم، ثم يرتبون الكلمات لتكوين جمل مفيدة ويقرؤونها.",mut:"يقرأ التلاميذ الجمل المتناسقة عن الموضوع مع مراعاة النبر والتنغيم، ثم يكوّنون جملا متناسقة من جمل بسيطة ويقرؤونها."},
+   "3":{huruf:"يكتب التلاميذ كلمات فيها الحروف المستهدفة كتابة صحيحة.",kata:"يكتب التلاميذ كلمات الموضوع كتابة صحيحة، ثم يكتبونها إملاء.",ayat:"يكتب التلاميذ جملا بسيطة عن الموضوع كتابة صحيحة.",mut:"يكتب التلاميذ جملا متناسقة عن الموضوع كتابة صحيحة."}};
+  const fa=(ACT[info.skill]||{})[info.kd]||(ACT[info.skill]||{}).kata||'يراجع التلاميذ ما تعلموه عن الموضوع.';
+  const acts=[`يعرض المعلم موضوع الدرس «${esc(info.tema)}» بالصور والبطاقات على الشاشة ويطرح أسئلة تمهيدية.`].concat(info.bkt?[esc(info.bkt)]:[]).concat([fa,'يلعب التلاميذ لعبة لغوية (مطابقة البطاقات) لتعزيز ما تعلموه.','يقوّم المعلم أداء التلاميذ ويقدم التغذية الراجعة.']);
   return `<div class="pg ba" data-fs="11"><table>
 <colgroup><col style="width:15%"><col style="width:22%"><col style="width:6%"><col style="width:22%"><col style="width:6%"><col style="width:22%"><col style="width:7%"></colgroup>
 <tr class="ttl"><td colspan="7" style="padding:0"><table style="border:0;width:100%"><tr><td style="border:0;background:#e7e6e6;text-align:right">خطة التدريس اليومية</td><td style="border:0;background:#e7e6e6;text-align:left">اللغة العربية</td></tr></table></td></tr>
