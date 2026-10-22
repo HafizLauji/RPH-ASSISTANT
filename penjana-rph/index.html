@@ -46,7 +46,7 @@ table.l tr:last-child td{border-bottom:0}
     direction:rtl;font-family:'Traditional Arabic','Amiri','FreeSerif','Noto Naskh Arabic','DejaVu Sans',serif;font-size:12pt}
 .pg>table{border-collapse:collapse;width:100%;height:100%;table-layout:fixed}
 .pg td{border:1px solid #000;padding:3px 8px;line-height:1.4;vertical-align:middle}
-.pg .head td{background:#ffd966;text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-weight:bold;font-size:1.15em}
+.pg .head td{background:#ffd966;text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-weight:bold;font-size:13pt;padding-left:64px;padding-right:64px}
 .pg .lab{background:#fff2cc;font-weight:bold}
 .pg .n{text-align:center;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.8em}
 .pg .lat{direction:ltr;unicode-bidi:isolate;display:inline-block;font-family:Arial,'DejaVu Sans',sans-serif;font-size:.8em}
@@ -407,8 +407,8 @@ function jana(w){
 /* satu RPH satu muka surat: kecilkan tulisan sedikit jika kandungan melebihi A4 */
 function muat(){
   document.querySelectorAll('.pg').forEach(pg=>{
-    let fs=parseFloat(pg.dataset.fs)||12; pg.style.fontSize=fs+'pt'; let g=0;
-    while(pg.scrollHeight>pg.clientHeight+1&&fs>6&&g<60){fs-=0.25;pg.style.fontSize=fs+'pt';g++;}
+    let fs=(parseFloat(pg.dataset.fs)||12)+4; pg.style.fontSize=fs+'pt'; let g=0;
+    while(pg.scrollHeight>pg.clientHeight+1&&fs>6&&g<100){fs-=0.25;pg.style.fontSize=fs+'pt';g++;}
   });
 }
 /* ---------- antara muka ---------- */
