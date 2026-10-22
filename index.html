@@ -93,6 +93,14 @@ table.l tr:last-child td{border-bottom:0}
     <h2>1. Bilangan murid setiap kelas (pilihan, hanya jika mahu paparkan bilangan)</h2>
     <div class="murid" id="murid"></div>
   </div>
+  <div class="card" id="pukal"><h2>Hari tak mengajar atau ada program? Tandakan sekali gus</h2>
+    <div class="murid" style="align-items:flex-end">
+      <label>Hari<select id="pk_hari"><option value="*">Semua hari minggu ini</option></select></label>
+      <label>Sebab<select id="pk_sebab"></select></label>
+      <button type="button" id="pk_ok">Tandakan</button>
+      <button type="button" class="sec" id="pk_kosong">Kosongkan tanda</button>
+    </div>
+    <p class="sub" style="margin:8px 0 0">RPH tetap dicetak. Tajuk RPT kekal pada minggu ini dan tidak ditolak ke minggu hadapan. Sebab ditulis dalam bahagian refleksi.</p></div>
   <div id="amaran" class="note" hidden></div>
   <div class="tw"><table class="l"><thead><tr><th>Hari</th><th>Masa</th><th>Kelas</th><th>Subjek</th><th>Fokus RPT</th><th>2. Penguasaan murid</th><th>Tajuk sendiri (Jawi), pilihan</th></tr></thead><tbody id="senarai"></tbody></table></div>
   <details>
@@ -181,7 +189,9 @@ const teach=D.cal.filter(w=>!w.off);
 function idxKandungan(w){return teach.findIndex(x=>x.no===w.no);}
 function sl(items,i,n){if(!items.length)return[];let a=Math.floor(i*items.length/n),b=Math.floor((i+1)*items.length/n);if(b<=a){a=Math.min(a,items.length-1);b=a+1;}return items.slice(a,b);}
 /* ---------- refleksi ---------- */
-const TAHAP_UI=[["","Belum diisi"],["A","Kebanyakan murid menguasai"],["B","Sebahagian murid menguasai"],["C","Ramai murid belum menguasai"],["T","Ditangguhkan"]];
+const TAHAP_UI=[["","Belum diisi"],["A","Kebanyakan murid menguasai"],["B","Sebahagian murid menguasai"],["C","Ramai murid belum menguasai"],["T:cuti","Tidak hadir: cuti"],["T:mc","Tidak hadir: MC (sakit)"],["T:program","Program sekolah"],["T:bengkel","Bengkel / kursus luar"],["T:peperiksaan","Peperiksaan"],["T:sukan","Sukan"],["T:lain","Ditangguhkan: sebab lain"]];
+const SEBAB_J={cuti:"ݢورو برچوتي",mc:"ݢورو تيدق هادير كران ساكيت (MC)",program:"ڤروݢرم سكوله",bengkel:"ݢورو مڠهادیري بڠكيل / كورسوس لوار",peperiksaan:"ڤڤريقساءن",sukan:"ڤروݢرم سوكن",lain:"............................."};
+const SEBAB_A={cuti:"إجازة المعلم",mc:"إجازة مرضية للمعلم",program:"برنامج المدرسة",bengkel:"ورشة عمل / دورة خارجية",peperiksaan:"الامتحان",sukan:"الأنشطة الرياضية",lain:"............................."};
 const RJ={A:["كباڽقن موريد مڠواساءي اوبجيكتيف ڤمبلاجرن ، \u2066TP 4 - TP 6\u2069.","دبريكن اكتيۋيتي ڤڠاياءن."],B:["سباهاݢيان موريد مڠواساءي اوبجيكتيف ڤمبلاجرن ، \u2066TP 3\u2069.","دبريكن لاتيهن ڤڠوكوهن."],C:["كباڽقن موريد بلوم مڠواساءي اوبجيكتيف ڤمبلاجرن ، \u2066TP 1 - TP 2\u2069.","دبريكن بيمبيڠن دان لاتيهن ڤموليهن، ڤمبلاجرن دأولڠ ڤد ڤرتموان ستروسڽ."]};
 const RA={A:["معظم التلاميذ حققوا أهداف التعلم (المستوى 4 - 6).","قُدمت لهم أنشطة الإثراء."],B:["بعض التلاميذ حققوا أهداف التعلم (المستوى 3).","قُدمت لهم تدريبات التعزيز."],C:["معظم التلاميذ لم يحققوا أهداف التعلم بعد (المستوى 1 - 2).","قُدم لهم العلاج الفردي وتُعاد الدرس في اللقاء القادم."]};
 const BJ={q:["ڤمرهاتين","باچاءن اينديۋيدو"],o:["ڤمرهاتين","سوال جواب ليسان","حاصيل كرجا"]};
@@ -197,7 +207,7 @@ function reflJawi(s,r,quran){
   const lv=(k,first)=>`<tr>${first?'<td class="lab" rowspan="5">رفلكسي / اءمڤك</td>':''}<td colspan="6"><span class="chk">${box(k)}</span> ${RJ[k][0]}${r.tahap===k?`<div class="sub2"><b>تيندقن سوسولن:</b> ${RJ[k][1]}${r.bil?` — ${r.bil.replace(" / "," دري ")} موريد`:''}</div>`:''}</td></tr>`;
   return lv('A',true)+lv('B')+lv('C')+
    `<tr><td colspan="6"><b>بوكتي ڤڠواساءن:</b> ${bukti}.</td></tr>`+
-   `<tr><td colspan="6"><span class="chk">${box('T')}</span> اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠݢوهكن كران : ${r.tahap==='T'?'.............................':'تيدق بركناءن'}</td></tr>`;
+   `<tr><td colspan="6"><span class="chk">${r.tahap.startsWith('T')?'☑':'☐'}</span> اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠݢوهكن كران : ${r.tahap.startsWith('T')?SEBAB_J[r.tahap.slice(2)]||'.............................':'تيدق بركناءن'}</td></tr>`;
 }
 function reflArab(r,quran){
   const box=k=>r.tahap===k?'☑':'☐';
@@ -205,7 +215,7 @@ function reflArab(r,quran){
   const lv=(k,first)=>`<tr>${first?'<td class="l p" rowspan="5">الملاحظة الذاتية</td>':''}<td colspan="6">${box(k)} ${RA[k][0]}${r.tahap===k?`<div><b>الإجراء اللاحق:</b> ${RA[k][1]}${r.bil?` — ${r.bil.replace(" / "," من ")} تلميذا`:''}</div>`:''}</td></tr>`;
   return lv('A',true)+lv('B')+lv('C')+
    `<tr><td colspan="6"><b>الشواهد:</b> ${bukti}.</td></tr>`+
-   `<tr><td colspan="6">${box('T')} تأجيل أنشطة التعليم والتعلم بسبب: ${r.tahap==='T'?'..............................':'لا ينطبق'}</td></tr>`;
+   `<tr><td colspan="6">${r.tahap.startsWith('T')?'☑':'☐'} تأجيل أنشطة التعليم والتعلم بسبب: ${r.tahap.startsWith('T')?SEBAB_A[r.tahap.slice(2)]||'..............................':'لا ينطبق'}</td></tr>`;
 }
 /* ---------- pengepala (PI dan Tasmik) ---------- */
 function header(s,w,penggal,bidang,tajukHtml){
@@ -425,6 +435,10 @@ function bina(){
   $('sandar').addEventListener('click',()=>{const b=new Blob([JSON.stringify({rph:1,tarikh:new Date().toISOString(),data:S})],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);const n=new Date();a.download='rph-sandaran-'+n.getFullYear()+pad(n.getMonth()+1)+pad(n.getDate())+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);});
   $('buka').addEventListener('click',()=>$('fail').click());
   $('fail').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!o||o.rph!==1||!o.data)throw 0;if(!confirm('Gantikan semua isian sekarang dengan isi fail sandaran ini?'))return;S=Object.assign({penggalOverride:{},murid:{},capai:{},tahap:{},custom:{},minggu:null,pustaka:{}},o.data);simpan();location.reload();}catch(x){alert('Fail ini bukan fail sandaran RPH yang sah.');}};r.readAsText(f);e.target.value='';});
+  $('pk_hari').innerHTML='<option value="*">Semua hari minggu ini</option>'+HARI.map(h=>`<option>${h}</option>`).join('');
+  $('pk_sebab').innerHTML=TAHAP_UI.filter(x=>x[0].startsWith('T')).map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
+  $('pk_ok').addEventListener('click',()=>{const w=semasa();if(w.off)return;const h=$('pk_hari').value;sesiMinggu(w).forEach(s=>{if(h==='*'||s.hari===h)S.tahap[s.key]=$('pk_sebab').value;});simpan();segar(true);});
+  $('pk_kosong').addEventListener('click',()=>{const w=semasa();if(w.off)return;const h=$('pk_hari').value;sesiMinggu(w).forEach(s=>{if((h==='*'||s.hari===h)&&String(S.tahap[s.key]||'').startsWith('T'))delete S.tahap[s.key];});simpan();segar(true);});
   $('cetak').addEventListener('click',()=>{try{window.print();}catch(e){}});
   segar(true);
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(muat);
