@@ -64,6 +64,12 @@ table.l tr:last-child td{border-bottom:0}
 .pg.ba .sm{font-size:.92em}
 .pg.ba ul{margin:0;padding-right:18px;list-style:square}
 .pg.ba .ltr{direction:ltr;unicode-bidi:embed}
+.pg:not(.ba) td{border:.8px solid #6b6b6b;line-height:1.6}
+.pg:not(.ba) .lab{color:#3b2f00}
+.pg .lab.pm{background:#e2efda;color:#1f3d12}.pg .lab.pk{background:#ddebf7;color:#12304f}.pg .lab.pt{background:#fbe5d6;color:#5a2a0b}.pg .lab.rf{background:#e6dcf5;color:#2d1a52}
+.pg .rfx{background:#faf7ff}
+.pg:not(.ba) .n{background:#f4f4f4;font-weight:bold}
+.pg .head td{background:#ffd966}
 @page{size:A4 portrait;margin:8mm}
 @media print{
   html,body{background:#fff}
@@ -204,10 +210,10 @@ function refl(s){
 function reflJawi(s,r,quran){
   const bukti=(quran?BJ.q:BJ.o).join('، ');
   const box=k=>r.tahap===k?'☑':'☐';
-  const lv=(k,first)=>`<tr>${first?'<td class="lab" rowspan="5">رفلكسي / اءمڤك</td>':''}<td colspan="6"><span class="chk">${box(k)}</span> ${RJ[k][0]}${r.tahap===k?`<div class="sub2"><b>تيندقن سوسولن:</b> ${RJ[k][1]}${r.bil?` — ${r.bil.replace(" / "," دري ")} موريد`:''}</div>`:''}</td></tr>`;
+  const lv=(k,first)=>`<tr>${first?'<td class="lab rf" rowspan="5">رفلكسي / اءمڤك</td>':''}<td colspan="6" class="rfx"><span class="chk">${box(k)}</span> ${RJ[k][0]}${r.tahap===k?`<div class="sub2"><b>تيندقن سوسولن:</b> ${RJ[k][1]}${r.bil?` — ${r.bil.replace(" / "," دري ")} موريد`:''}</div>`:''}</td></tr>`;
   return lv('A',true)+lv('B')+lv('C')+
-   `<tr><td colspan="6"><b>بوكتي ڤڠواساءن:</b> ${bukti}.</td></tr>`+
-   `<tr><td colspan="6"><span class="chk">${r.tahap.startsWith('T')?'☑':'☐'}</span> اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠݢوهكن كران : ${r.tahap.startsWith('T')?SEBAB_J[r.tahap.slice(2)]||'.............................':'تيدق بركناءن'}</td></tr>`;
+   `<tr><td colspan="6" class="rfx"><b>بوكتي ڤڠواساءن:</b> ${bukti}.</td></tr>`+
+   `<tr><td colspan="6" class="rfx"><span class="chk">${r.tahap.startsWith('T')?'☑':'☐'}</span> اكتيۋيتي ڤڠاجرن دان ڤمبلاجرن دتڠݢوهكن كران : ${r.tahap.startsWith('T')?SEBAB_J[r.tahap.slice(2)]||'.............................':'تيدق بركناءن'}</td></tr>`;
 }
 function reflArab(r,quran){
   const box=k=>r.tahap===k?'☑':'☐';
@@ -225,9 +231,9 @@ function header(s,w,penggal,bidang,tajukHtml){
 <tr><td class="lab">ماس</td><td class="c" colspan="2">${masaLabel(s.mula)}</td><td class="c">${s.mula}-${s.tamat}</td><td class="lab">كلس</td><td class="c" colspan="2"><span class="lat" style="font-size:1em">${s.thn} CERDIK</span></td></tr>
 <tr><td class="lab">مات ڤلاجرن / بيدڠ</td><td colspan="2" class="cj">ڤنديديقن إسلام</td><td class="cj">${BIDANG_JAWI[bidang]||bidang}</td><td class="lab">تاجوق</td><td colspan="2">${tajukHtml}</td></tr>`;
 }
-function numrows(label,lines){
+function numrows(label,lines,cls){
   const items=[];lines.forEach(l=>{if(l.startsWith('>')&&items.length)items[items.length-1].sub.push(l.slice(1).trim());else items.push({t:l,sub:[]});});
-  return items.map((it,i)=>`<tr>${i===0?`<td class="lab" rowspan="${items.length}">${label}</td>`:''}<td class="n">${ROM[i]}</td><td colspan="5">${latin(it.t)}${it.sub.map(x=>`<div class="sub2">${latin(x)}</div>`).join('')}</td></tr>`).join('');
+  return items.map((it,i)=>`<tr>${i===0?`<td class="lab ${cls||''}" rowspan="${items.length}">${label}</td>`:''}<td class="n">${ROM[i]}</td><td colspan="5">${latin(it.t)}${it.sub.map(x=>`<div class="sub2">${latin(x)}</div>`).join('')}</td></tr>`).join('');
 }
 /* ---------- halaman RPH Jawi (PI dan Tasmik) ---------- */
 function laman_jawi(s,w,penggal,o){
@@ -242,9 +248,9 @@ function laman_jawi(s,w,penggal,o){
 <tr><td class="lab" rowspan="${o.obj.length+1}">اوبجيكتيف ڤلاجرن</td><td colspan="6">ڤد اخير ڤڠاجرن دان ڤمبلاجرن موريد داڤت:</td></tr>
 ${o.obj.map((t,i)=>`<tr><td class="n">${ROM[i]}</td><td colspan="5">${latin(t)}</td></tr>`).join('')}
 <tr><td class="lab">كريتريا كجاياءن</td><td colspan="6">${latin(o.krit)}</td></tr>
-${numrows('اكتيۋيتي ڤرمولاءن',o.permulaan)}
-${numrows('اكتيۋيتي ڤرکمبڠن',o.perkembangan)}
-${numrows('اكتيۋيتي ڤنوتوڤ',o.penutup)}
+${numrows('اكتيۋيتي ڤرمولاءن',o.permulaan,'pm')}
+${numrows('اكتيۋيتي ڤرکمبڠن',o.perkembangan,'pk')}
+${numrows('اكتيۋيتي ڤنوتوڤ',o.penutup,'pt')}
 ${reflJawi(s,r,o.bidang==='Al-Quran'||o.bidang==='Tasmik')}
 </table></div>`;
 }
